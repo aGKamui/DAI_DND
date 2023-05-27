@@ -1,5 +1,5 @@
 const { connect } = require("../config/db.config");
-const { Authentication } = require("../model/authentication.model");
+const UserCredential = require("../model/userCredential.model");
 const logger = require("../logger/api.logger");
 
 class AuthenticationRepository {
@@ -8,7 +8,7 @@ class AuthenticationRepository {
   }
 
   async loginUser() {
-    const user = await Authentication.find({});
+    const user = await UserCredential.find({});
     console.log("users:::", user);
     return user;
   }
@@ -16,7 +16,7 @@ class AuthenticationRepository {
   async createUser(user) {
     let data = {};
     try {
-      data = await Authentication.create(user);
+      data = await UserCredential.create(user);
     } catch (err) {
       logger.error("Error::" + err);
     }

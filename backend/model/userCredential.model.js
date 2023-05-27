@@ -12,7 +12,7 @@ const UserCredentialSchema = new Schema({
         required: [true, "User needs a password"]
     },
     email: {
-        type: mongoose.SchemaTypes.email,
+        type: String,
         required: [true, "User needs an email to log in"],
         unique: true
     }

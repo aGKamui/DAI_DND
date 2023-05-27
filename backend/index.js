@@ -1,7 +1,6 @@
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
-const taskRoutes = require("./route/task.route");
 const authenticationRoutes = require("./route/authentication.route");
 const logger = require("./logger/api.logger");
 
@@ -24,8 +23,6 @@ app.use(bodyParser.json());
 app.use("/api/authentication", authenticationRoutes);
 
 
-
-app.use("/api/task", taskRoutes);
 
 app.get("/random", (req, res) => {
   res.status = 418;
