@@ -1,10 +1,15 @@
-import { Drawer, List, ListItemButton, ListItemIcon } from "@mui/material";
-import sizeConfigs from "../../configs/sizeConfigs";
+import { Avatar, Drawer, List, ListItemButton, ListItemIcon, Stack, Toolbar } from '@mui/material';
+import React from 'react'
+import sizeConfigs from '../../config/sizeConfig.ts';
+import colorConfigs from '../../config/colorConfig.ts';
+import appRoutes from '../../routes/appRoutes.tsx';
+import assets from '../../assets/index.ts';
+import SidebarItem from './SidebarItem.tsx';
 
 const Sidebar = () => {
     return (
         <Drawer
-            variant = ""
+            variant='permanent'
             sx={{
                 width: sizeConfigs.sidebar.width,
                 flexShrink: 0,
@@ -12,7 +17,8 @@ const Sidebar = () => {
                     width: sizeConfigs.sidebar.width,
                     boxSizing: "border-box",
                     borderRight: "0px",
-                    backgroundColor: colorConfigs.sidebar.bg
+                    backgroundColor: colorConfigs.sidebar.bg,
+                    color: colorConfigs.sidebar.color
                 }
             }}
         >
@@ -27,14 +33,10 @@ const Sidebar = () => {
                     </Stack>
                 </Toolbar>
                 {appRoutes.map((route, index) => (
-                    <ListItemButton>
-                        <ListItemIcon>
-                            {route.sidebarProps.icon && route.sidebarProps.icon}
-                        </ListItemIcon>
-                        {route.sidebarProps.displayText}
-                </ListItemButton>
+                    route.sidebarProps ? (
+                        <SidebarItem item={route}/>
+                    ) : null
                 ))}
-                
             </List>
         </Drawer>
     );

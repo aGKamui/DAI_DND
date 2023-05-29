@@ -12,14 +12,17 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MainLayout from './components/layout/MainLayout';
-
+import MainLayout from './components/layout/MainLayout.tsx';
+import HomePage from './pages/home/HomePage.tsx';
+import { routes } from './routes/index.tsx';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+            {routes}
         </Route>
       </Routes>
     </BrowserRouter>
