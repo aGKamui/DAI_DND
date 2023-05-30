@@ -8,7 +8,8 @@ class AuthenticationService {
     let auth = await authenticationRepository.loginUser(user);
     if (auth !== 401) {
       let token = await this.generateAuthToken(auth);
-      auth = {username: auth, token: token}
+      console.log(user);
+      auth = {username: auth[0],type: auth[1], token: token}
     }
     return auth;
   }

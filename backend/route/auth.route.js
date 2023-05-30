@@ -16,7 +16,7 @@ router.post("/login/", async (req, res) => {
   auth = await authController.loginUser(req.body);
   if (auth === 401) { res.status(auth).sendStatus(401); }
   else{
-    const { username, token } = auth;
+    const { username, token } = auth;   
     req.session.user = {username, token};
     res.json(auth);
   }
