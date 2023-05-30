@@ -3,6 +3,7 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const authenticationRoutes = require("./route/auth.route");
+const userRoutes = require("./route/user.route")
 const logger = require("./logger/api.logger");
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(
 
 app.use("/api/auth", authenticationRoutes);
 
+app.use("/api/user", userRoutes);
 
 
 app.get("/random", (req, res) => {
