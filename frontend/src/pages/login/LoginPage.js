@@ -20,8 +20,8 @@ const defaultTheme = createTheme();
 
 function SignIn() {
 
-  const sendToRegister = () => {
-    window.location.href = '/register';
+  const sendToDashboard = () => {
+    window.location.href = '/dashboard';
   };
 
   const handleSubmit = (event) => {
@@ -47,7 +47,7 @@ function SignIn() {
       cache: false,
       data: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
       success: function() {
-
+        sendToDashboard()    
       },
       error: function(xhr, status, error) { console.log(error); }
     });
@@ -113,9 +113,7 @@ function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link onClick={() => {
-                  sendToRegister()
-                  }} variant="body2">
+                <Link href="/register" variant="body2">
                   {"Não tem uma conta? Efetue o Registo!"}
                 </Link>
               </Grid>

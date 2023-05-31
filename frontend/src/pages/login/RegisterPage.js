@@ -40,12 +40,7 @@ function Register() {
       cache: false,
       data: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
       success: function() {
-        <a
-          className="Home-link"
-          href="http://localhost:3000/dashboard"
-          target="_blank"
-          rel="noopener noreferrer"
-        ></a>
+       
 
       },
       error: function(xhr, status, error) { console.log(error); }

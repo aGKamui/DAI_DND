@@ -12,13 +12,12 @@ const appRoutes: RouteType[] = [
         index: true,
         element: <HomePage />,
         state: "home"
-    },
+    },    
     {
-        path: "/dashboard",
         element: <DashboardPageLayout/>,
         state: "dashboard",
         sidebarProps: {
-            displayText: "Dashboard",
+            displayText: "As Minhas Campanhas",
             icon: <DashboardOutLinedIcon/>
         }, child: [
             {
@@ -27,21 +26,76 @@ const appRoutes: RouteType[] = [
                 state: "dashboard.index"
             },
             {
-                path: "/dashboard/default",
+                path: "/dashboard/testepage",
                 element: <DefaultPage/>,
-                state: "dashboard.default",
+                state: "dashboard.testepage",
                 sidebarProps: {
-                    displayText: "Default"
+                    displayText: "Continuar Campanha"
+                }
+            },
+            {
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
+                state: "dashboard.testepage",
+                sidebarProps: {
+                    displayText: "Criar Campanha"
+                }
+            },
+            {
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
+                state: "dashboard.testepage",
+                sidebarProps: {
+                    displayText: "Eliminar Campanhas"
                 }
             }
         ]
     },
     {
+        path: "/dashboard",
+        element: <DashboardPageLayout/>,
+        state: "dashboard",
+        sidebarProps: {
+            displayText: "As minhas personagens",
+            icon: <DashboardOutLinedIcon/>
+        }, child: [
+            {
+                index: true,
+                element: <DashboardIndex/>,
+                state: "dashboard.index"
+            },
+            {
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
+                state: "dashboard.testepage",
+                sidebarProps: {
+                    displayText: "Criar nova personagem"
+                }
+            },
+            {
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
+                state: "dashboard.testepage",
+                sidebarProps: {
+                    displayText: "Editar personagem"
+                }
+            },
+            {
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
+                state: "dashboard.testepage",
+                sidebarProps: {
+                    displayText: "Eliminar personagem"
+                }
+            }
+        ]
+    },    
+    {
         path: "/changelog",
         element: <ChangelogPage/>,
         state: "changelog",
         sidebarProps: {
-            displayText: "Changelog",
+            displayText: "Subscrição",
             icon: <DashboardOutLinedIcon/>
         }
     }

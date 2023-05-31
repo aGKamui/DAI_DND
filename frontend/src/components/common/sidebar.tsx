@@ -6,6 +6,7 @@ import appRoutes from '../../routes/appRoutes.tsx';
 import assets from '../../assets/index.ts';
 import SidebarItem from './SidebarItem.tsx';
 import SidebarItemCollapse from './SidebarItemCollapse.tsx';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
     return (
@@ -30,7 +31,9 @@ const Sidebar = () => {
                         direction="row"
                         justifyContent="center"
                     >
-                        <Avatar src={assets.images.logo}/>
+                        <a href="/dashboard"  >
+                        <img src={assets.images.logo}  width={142} height={75} alt="Coding Beauty logo"></img></a>
+                     
                     </Stack>
                 </Toolbar>
                 {appRoutes.map((route, index) => (

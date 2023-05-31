@@ -49,6 +49,8 @@
     ]
   },
   "devDependencies": {
-    "node": "^16.0.0"
+    "css-loader": "^6.8.1",
+    "node": "^16.0.0",
+    "style-loader": "^3.3.3"
   }
 }
