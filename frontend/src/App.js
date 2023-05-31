@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,17 +12,20 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import $ from 'jquery';
-function Copyright(props) {
+import MainLayout from './components/layout/MainLayout.tsx';
+import HomePage from './pages/home/HomePage.tsx';
+import { routes } from './routes/index.tsx';
+
+function App() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="">
-        Ducks & Dragons 
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+            {routes}
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
@@ -33,44 +37,9 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    $.ajax({
-      method: 'POST',
-      dataType: 'json',
-      url: 'http://localhost:8000/api/auth/login',
-      contentType: 'application/json',
-      headers: {
-        'Access-Control-Allow-Credentials' : true ,
-        'Access-Control-Allow-Origin' : '*' ,
-        'Access-Control-Allow-Methods' : 'GET,OPTIONS,PATCH,DELETE,POST,PUT' ,
-        'Access-Control-Allow-Headers' : 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
-    },
-      cache: false,
-      data: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
-      success: function() {
-        <a
-          className="Home-link"
-          href="http://localhost:3000/dashboard"
-          target="_blank"
-          rel="noopener noreferrer"
-        ></a>
-      
-      },
-      error: function(xhr, status, error) { console.log(error); }
-    });
     console.log({
       email: data.get('email'),
       password: data.get('password'),
-    });
-
-    $.ajax({
-      method: 'POST',
-      dataType: 'json',
-      url: 'localhost:8000/api/auth/login',
-      contentType: 'application/json',
-      cache: false,
-      data: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
-      success: function() {console.log("WORKED");},
-      error: function(xhr, status, error) {console.log(error);      }
     });
   };
 
@@ -116,17 +85,13 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Lembrar este computador"
             />
-            
             <Button
-              onClick={() => {
-                <serverData />
-              }}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Login
+              Sign In
             </Button>
             <Grid container>
               <Grid item xs>
