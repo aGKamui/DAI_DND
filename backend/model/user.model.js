@@ -7,10 +7,19 @@ const UserSchema = new Schema({
         required: [true, "User needs an username"],
         unique: true
     },
-    userType: {
+    type: {
         type: String,
         enum: ["Paid","Free"],
-        required: [true, "User needs a type name"]
+        required: [true, "User needs a type (Paid or Free)"]
+    },
+    password: {
+        type: String,
+        required: [true, "User needs a password"]
+    },
+    email: {
+        type: String,
+        required: [true, "User needs an email to log in"],
+        unique: true
     }
 })
 
