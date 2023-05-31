@@ -12,6 +12,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import serverData from './requests/loginRequest'
+
+
+
+import $ from "jquery";
+import { FormLabel } from '@mui/material';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -36,6 +42,17 @@ export default function SignIn() {
     console.log({
       email: data.get('email'),
       password: data.get('password'),
+    });
+
+    $.ajax({
+      method: 'POST',
+      dataType: 'json',
+      url: 'localhost:8000/api/auth/login',
+      contentType: 'application/json',
+      cache: false,
+      data: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
+      success: function() {console.log("WORKED");},
+      error: function(xhr, status, error) {console.log(error);      }
     });
   };
 
@@ -81,13 +98,17 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Lembrar este computador"
             />
+            
             <Button
+              onClick={() => {
+                <serverData />
+              }}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Login
             </Button>
             <Grid container>
               <Grid item xs>

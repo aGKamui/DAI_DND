@@ -11,6 +11,9 @@ const port = process.env.PORT || 8000;
 app.use(express.static(path.join(__dirname, "./frontend/build")));
 app.use(bodyParser.json());
 
+var cors = require("cors");
+app.use(cors());
+
 
 // Configure session middleware
 app.use(
