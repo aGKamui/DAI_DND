@@ -33,24 +33,29 @@ function SignIn() {
       password: data.get('password'),
     });
 
-    $.ajax({
+    fetch('http://localhost:8000/api/auth/login', {
       method: 'POST',
-      dataType: 'json',
-      url: 'http://localhost:8000/api/auth/login',
-      contentType: 'application/json',
       headers: {
-        'Access-Control-Allow-Credentials' : true ,
-        'Access-Control-Allow-Origin' : '*' ,
-        'Access-Control-Allow-Methods' : 'GET,OPTIONS,PATCH,DELETE,POST,PUT' ,
-        'Access-Control-Allow-Headers' : 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
-    },
-      cache: false,
-      data: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
-      success: function() {
-        sendToDashboard()    
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+        'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
       },
-      error: function(xhr, status, error) { console.log(error); }
-    });
+      body: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(() => {
+        sendToDashboard();
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
   };
   return (
