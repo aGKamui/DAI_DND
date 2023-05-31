@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MainLayout from './components/layout/MainLayout.tsx';
 import HomePage from './pages/home/HomePage.tsx';
 import { routes } from './routes/index.tsx';
-
+import $ from "jquery";
 function App() {
   return (
     <BrowserRouter>
@@ -37,10 +37,37 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+
+    $.ajax({
+      method: 'POST',
+      dataType: 'json',
+      url: 'http://localhost:8000/api/auth/login',
+      contentType: 'application/json',
+      headers: {
+        'Access-Control-Allow-Credentials' : true ,
+        'Access-Control-Allow-Origin' : '*' ,
+        'Access-Control-Allow-Methods' : 'GET,OPTIONS,PATCH,DELETE,POST,PUT' ,
+        'Access-Control-Allow-Headers' : 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
+    },
+      cache: false,
+      data: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
+      success: function() {
+        <a
+          className="Home-link"
+          href="http://localhost:3000/dashboard"
+          target="_blank"
+          rel="noopener noreferrer"
+        ></a>
+
+      },
+      error: function(xhr, status, error) { console.log(error); }
+    });
+
   };
 
   return (
@@ -107,7 +134,6 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
