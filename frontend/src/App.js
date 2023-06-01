@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { BrowserRouter, Routes, Route, Navigate  } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,115 +12,25 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-function Copyright(props) {
+import MainLayout from './components/layout/MainLayout.tsx';
+import HomePage from './pages/home/HomePage.tsx';
+import { routes } from './routes/index.tsx';
+import $ from "jquery";
+import SignIn from './pages/login/LoginPage.js';
+import Register from './pages/login/RegisterPage.js';
+import DefaultPage from './pages/dashboard/DefaultPage.tsx';
+import SaaSPage from './pages/dashboard/SaasPage.tsx';
+function App() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="">
-        Ducks & Dragons 
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+      <Routes>      
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/register" element={<Register />}/>  
+        <Route path="/dashboard" element={<DefaultPage />}/> 
+        <Route path="/dashboard/testepage" element={<SaaSPage />}/>  
+        <Route path='*' element={<Navigate to="/login" replace={true} />} /> 
+         
+      </Routes>
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
-
-export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Efetuar Login
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email de Utilizador"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Lembrar este computador"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
-  );
-}
-
-
-//function App() {
-//  return (
-//    <BrowserRouter>
-//      <div>
-//        <Routes>
-//          <Route path="/" element={<Home />} />
-//        </Routes>
-//      </div>
-//    </BrowserRouter>
-//  );
-//}
-
-// export default App;
+export default App;
