@@ -37,7 +37,7 @@ app.use("/api/user", userRoutes);
 
 app.use("/api/character", characterRoutes); 
 
-// app.use("/api/dice", diceRoutes);
+app.use("/api/dice", diceRoutes);
 
 
 app.get("/random", (req, res) => {
