@@ -9,7 +9,7 @@ const UserSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ["Paid","Free"],
+        enum: ["Whale","Dophin","Free"],
         required: [true, "User needs a type (Paid or Free)"]
     },
     password: {
