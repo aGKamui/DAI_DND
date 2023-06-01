@@ -22,6 +22,7 @@ import DefaultPage from './pages/dashboard/DefaultPage.tsx';
 import SaaSPage from './pages/dashboard/SaasPage.tsx';
 import MyCharacterPage from './pages/dashboard/character/edit/MyCharacterPage.tsx';
 import PricingPage from './pages/dashboard/pricing/Pricing.js';
+import MyCampaignPage from './pages/dashboard/campaigns/MyCampaignPage.tsx';
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
         <Route path="/dashboard" element={<DefaultPage />}/> 
         <Route path="/dashboard/payments" element={<PricingPage />}/> 
         <Route path="/dashboard/newCharacter" element={<MyCharacterPage />}/>  
+        <Route path="/dashboard/myCampaigns" element={<MyCampaignPage />}/>  
+
+        
         <Route path='*' element={<Navigate to="/login" replace={true} />} />          
       </Routes>
   );
