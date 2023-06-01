@@ -20,16 +20,18 @@ import SignIn from './pages/login/LoginPage.js';
 import Register from './pages/login/RegisterPage.js';
 import DefaultPage from './pages/dashboard/DefaultPage.tsx';
 import SaaSPage from './pages/dashboard/SaasPage.tsx';
-import NewCharacterPage from './pages/dashboard/character/edit/NewCharacterPage.tsx';
+import MyCharacterPage from './pages/dashboard/character/edit/MyCharacterPage.tsx';
+import PricingPage from './pages/dashboard/pricing/Pricing.js';
+
 function App() {
   return (
       <Routes>      
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<Register />}/>  
         <Route path="/dashboard" element={<DefaultPage />}/> 
-        <Route path="/dashboard/newCharacter" element={<NewCharacterPage />}/>  
-        <Route path='*' element={<Navigate to="/login" replace={true} />} /> 
-         
+        <Route path="/dashboard/payments" element={<PricingPage />}/> 
+        <Route path="/dashboard/newCharacter" element={<MyCharacterPage />}/>  
+        <Route path='*' element={<Navigate to="/login" replace={true} />} />          
       </Routes>
   );
 }

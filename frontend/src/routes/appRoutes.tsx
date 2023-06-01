@@ -5,8 +5,8 @@ import DashboardOutLinedIcon from "@mui/icons-material/DashboardOutlined.js";
 import DashboardPageLayout from "../pages/dashboard/DashboardPageLayout.tsx";
 import DefaultPage from "../pages/dashboard/DefaultPage.tsx";
 import DashboardIndex from "../pages/dashboard/DashboardIndex.tsx";
-import ChangelogPage from "../pages/changelog/ChangelogPage.tsx";
-import NewCharacterPage from "../pages/dashboard/character/edit/NewCharacterPage.tsx";
+import Pricing from "../pages/dashboard/pricing/Pricing.js";
+import MyCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.tsx";
 
 const appRoutes: RouteType[] = [
     {
@@ -75,25 +75,17 @@ const appRoutes: RouteType[] = [
             },
             {
                 path: "/dashboard/newCharacter",
-                element: <NewCharacterPage/>,
-                state: "dashboard.newcharacterpage",
+                element: <MyCharacterPage/>,
+                state: "dashboard.Mycharacterpage",
                 sidebarProps: {
                     displayText: "Editar personagens"
-                }
-            },
-            {
-                path: "/dashboard/testepage",
-                element: <DefaultPage/>,
-                state: "dashboard.testepage",
-                sidebarProps: {
-                    displayText: "Eliminar personagem"
                 }
             }
         ]
     },    
     {
-        path: "/changelog",
-        element: <ChangelogPage/>,
+        path: "/dashboard/payments",
+        element: <Pricing/>,
         state: "changelog",
         sidebarProps: {
             displayText: "Subscrição",
