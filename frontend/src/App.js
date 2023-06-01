@@ -20,6 +20,7 @@ import SignIn from './pages/login/LoginPage.js';
 import Register from './pages/login/RegisterPage.js';
 import DefaultPage from './pages/dashboard/DefaultPage.tsx';
 import SaaSPage from './pages/dashboard/SaasPage.tsx';
+import Perfil from './pages/dashboard/Perfil.tsx';
 function App() {
   return (
       <Routes>      
@@ -28,7 +29,7 @@ function App() {
         <Route path="/dashboard" element={<DefaultPage />}/> 
         <Route path="/dashboard/testepage" element={<SaaSPage />}/>  
         <Route path='*' element={<Navigate to="/login" replace={true} />} /> 
-         
+        <Route path="/dashboard/profile" element={<Perfil />}/> 
       </Routes>
   );
 }

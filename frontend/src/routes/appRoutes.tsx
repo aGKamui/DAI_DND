@@ -7,6 +7,7 @@ import DefaultPage from "../pages/dashboard/DefaultPage.tsx";
 import DashboardIndex from "../pages/dashboard/DashboardIndex.tsx";
 import ChangelogPage from "../pages/changelog/ChangelogPage.tsx";
 
+
 const appRoutes: RouteType[] = [
     {
         index: true,
@@ -96,6 +97,15 @@ const appRoutes: RouteType[] = [
         state: "changelog",
         sidebarProps: {
             displayText: "Subscrição",
+            icon: <DashboardOutLinedIcon/>
+        }
+    },
+    {
+        path: "/dashboard/profile",
+        element: <ChangelogPage/>,
+        state: "dashboard.testepage",
+        sidebarProps: {
+            displayText: "Perfil",
             icon: <DashboardOutLinedIcon/>
         }
     }
