@@ -20,13 +20,14 @@ import SignIn from './pages/login/LoginPage.js';
 import Register from './pages/login/RegisterPage.js';
 import DefaultPage from './pages/dashboard/DefaultPage.tsx';
 import SaaSPage from './pages/dashboard/SaasPage.tsx';
+import NewCharacterPage from './pages/dashboard/character/edit/NewCharacterPage.tsx';
 function App() {
   return (
       <Routes>      
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<Register />}/>  
         <Route path="/dashboard" element={<DefaultPage />}/> 
-        <Route path="/dashboard/testepage" element={<SaaSPage />}/>  
+        <Route path="/dashboard/newCharacter" element={<NewCharacterPage />}/>  
         <Route path='*' element={<Navigate to="/login" replace={true} />} /> 
          
       </Routes>

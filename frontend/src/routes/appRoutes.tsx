@@ -6,6 +6,7 @@ import DashboardPageLayout from "../pages/dashboard/DashboardPageLayout.tsx";
 import DefaultPage from "../pages/dashboard/DefaultPage.tsx";
 import DashboardIndex from "../pages/dashboard/DashboardIndex.tsx";
 import ChangelogPage from "../pages/changelog/ChangelogPage.tsx";
+import NewCharacterPage from "../pages/dashboard/character/edit/NewCharacterPage.tsx";
 
 const appRoutes: RouteType[] = [
     {
@@ -73,11 +74,11 @@ const appRoutes: RouteType[] = [
                 }
             },
             {
-                path: "/dashboard/testepage",
-                element: <DefaultPage/>,
-                state: "dashboard.testepage",
+                path: "/dashboard/newCharacter",
+                element: <NewCharacterPage/>,
+                state: "dashboard.newcharacterpage",
                 sidebarProps: {
-                    displayText: "Editar personagem"
+                    displayText: "Editar personagens"
                 }
             },
             {
