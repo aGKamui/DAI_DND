@@ -1,0 +1,79 @@
+body{
+    /* text-align: center; */
+}
+
+#quickInfo{
+    margin-left: 5%;
+    margin-right: 5%;
+    /* padding: 1%; */
+    /* border: 1px solid blueviolet; */
+    width: 90%;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+
+}
+
+#quickInfo div + div{
+ margin-left:10px;
+}
+
+.abilityScores{
+    display:inline-block;
+    text-align: center;
+    /* border: 1px solid green; */
+    margin-right: 20px;
+}
+
+
+.quickInfoContainer{
+    display: inline-block;
+    text-align: center;
+    border:1px solid red;
+    width: 100px;
+    height: 70px;
+}
+.quickInfoContainer div{
+    display: inline-block;
+}
+
+.quickInfoContainer .modifier{
+    display:relative;
+    border:1px solid red;
+    width: 90%;
+    height: 40%;
+    left:25%;
+    font-size: large;
+    font-size: 120%;
+}
+
+.HitPointsContainer{
+    display:inline-flex;
+    text-align: center;
+    border: 1px solid red;
+    padding: 5px;
+}
+.HitPointsContainer input{
+    width: 30px;
+}
+#HealthControllerContainer{
+    /* height:100%; */
+    width: 15%;
+}
+#TempHPContainer{
+    /* height:100%; */
+    width: 15%;
+}
+#HPContainer{
+    /* height:100%; */
+    width: 70%;
+    display:inline-flex;
+}
+.HitPointsParent{
+    padding-left: 50px;
+}
+
+#HPContainer .divider{
+    /* height:100%; */
+    width: 25%;
+}
