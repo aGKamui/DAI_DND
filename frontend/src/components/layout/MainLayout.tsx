@@ -1,10 +1,10 @@
 import React from 'react';
 import { Outlet } from "react-router-dom";
 import { Box, Toolbar } from "@mui/material";
-import Topbar from "../common/Topbar.tsx";
-import Sidebar from "../common/Sidebar.tsx";
-import sizeConfigs from '../../config/sizeConfig.ts';
-import colorConfigs from '../../config/colorConfig.ts';
+import Topbar from "../common/Topbar";
+import Sidebar from "../common/Sidebar";
+import sizeConfigs from '../../config/sizeConfig';
+import colorConfigs from '../../config/colorConfig';
 
 const MainLayout = () => {
     return (

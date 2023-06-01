@@ -1,11 +1,11 @@
 import React from "react";
-import HomePage from "../pages/home/HomePage.tsx";
-import { RouteType } from "./config.ts";
+import HomePage from "../pages/home/HomePage";
+import { RouteType } from "./config";
 import DashboardOutLinedIcon from "@mui/icons-material/DashboardOutlined.js";
-import DashboardPageLayout from "../pages/dashboard/DashboardPageLayout.tsx";
-import DefaultPage from "../pages/dashboard/DefaultPage.tsx";
-import DashboardIndex from "../pages/dashboard/DashboardIndex.tsx";
-import ChangelogPage from "../pages/changelog/ChangelogPage.tsx";
+import DashboardPageLayout from "../pages/dashboard/DashboardPageLayout";
+import DefaultPage from "../pages/dashboard/DefaultPage";
+import DashboardIndex from "../pages/dashboard/DashboardIndex";
+import ChangelogPage from "../pages/changelog/ChangelogPage";
 
 const appRoutes: RouteType[] = [
     {

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { ListItemButton, ListItemIcon, Link, ListItemText, Typography } from "@mui/material";
-import { RouteType } from "../../routes/config.ts";
+import { RouteType } from "../../routes/config";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store.ts";
-import colorConfigs from "../../config/colorConfig.ts";
+import { RootState } from "../../redux/store";
+import colorConfigs from "../../config/colorConfig";
 
 type Props = {
     item: RouteType;
@@ -14,7 +14,7 @@ const SidebarItem = ({ item }: Props) => {
     return (
         item.sidebarProps && item.path ? (
             <ListItemButton
-                component={Link}
+                /*component={Link}
                 to={item.path}
                 sx={{
                     "&: hover": {
@@ -24,7 +24,7 @@ const SidebarItem = ({ item }: Props) => {
                     : "unset",
                     paddingY: "12px",
                     paddingX: "24px"
-                }}
+                }}*/
             >
                 <ListItemIcon sx={{
                     color: colorConfigs.sidebar.color

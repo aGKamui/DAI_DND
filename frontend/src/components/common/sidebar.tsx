@@ -1,11 +1,12 @@
 import { Avatar, Drawer, List, ListItemButton, ListItemIcon, Stack, Toolbar } from '@mui/material';
 import React from 'react'
-import sizeConfigs from '../../config/sizeConfig.ts';
-import colorConfigs from '../../config/colorConfig.ts';
-import appRoutes from '../../routes/appRoutes.tsx';
-import assets from '../../assets/index.ts';
-import SidebarItem from './SidebarItem.tsx';
-import SidebarItemCollapse from './SidebarItemCollapse.tsx';
+import sizeConfigs from '../../config/sizeConfig';
+import colorConfigs from '../../config/colorConfig';
+import appRoutes from '../../routes/appRoutes';
+import assets from '../../assets/index';
+import SidebarItem from './SidebarItem';
+import SidebarItemCollapse from './SidebarItemCollapse';
+
 
 const Sidebar = () => {
     return (

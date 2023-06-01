@@ -1,9 +1,9 @@
-import { RouteType } from "./config.ts";
+import { RouteType } from "./config";
 import React from 'react';
 import { ReactNode } from "react";
 import { Route } from "react-router-dom";
-import PageWrapper from "../components/layout/PageWrapper.tsx";
-import appRoutes from "./appRoutes.tsx";
+import PageWrapper from "../components/layout/PageWrapper";
+import appRoutes from "./appRoutes";
 
 const generateRoute = (routes: RouteType[]): ReactNode => {
     return routes.map((route, index) => (

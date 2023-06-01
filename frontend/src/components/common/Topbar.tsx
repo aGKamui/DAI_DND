@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import React from 'react';
-import sizeConfigs from '../../config/sizeConfig.ts';
-import colorConfigs from '../../config/colorConfig.ts';
+import sizeConfigs from '../../config/sizeConfig';
+import colorConfigs from '../../config/colorConfig';
 
 const Topbar = () => {
     return (
