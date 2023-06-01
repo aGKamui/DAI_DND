@@ -7,13 +7,11 @@ class UserController {
   }
 
   async changeType(username, type){
-    let user = await userService.changeType(username, type);
-    return user;
+    return await userService.changeType(username, type);
   }
 
-  async createUser(user){
-    let newUser = await userService.createUser(user);
-    return newUser;
+  async deleteUser(user){
+    return await userService.deleteUser(user);
   }
 }
 module.exports = new UserController();

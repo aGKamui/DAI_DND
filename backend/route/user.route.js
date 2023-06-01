@@ -20,17 +20,11 @@ router.post("/changeType", async(req, res) => {
     }else{res.sendStatus(401);}
 })
 
-router.post("/create", async(req, res) => {
-    let data = await userController.createUser(req.body);
-    if(data === 400){
-        res.sendStatus(400);
-    }else{
+router.delete("/delete", async(req, res) => {
+    if(req.session.user){
+        let data = await userController.deleteUser(req.session.user.username);
         res.json(data);
-    }
-})
-
-router.post("/delete", async(req, res) => {
-    
+    }else{res.sendStatus(401);}
 })
 
 module.exports = router;

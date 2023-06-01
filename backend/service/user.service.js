@@ -9,19 +9,16 @@ class UserService {
   }
 
   async changeType(username, type){
-    if(type.usertype === "Free" || type.usertype === "Paid"){
+    if(type.type === "Free" || type.type === "Paid"){
       let updatedUser = await userRepository.changeType(username, type);
       return updatedUser;
     }
     return 400;
   }
 
-  async createUser(user){
-    if(user.usertype === "Free" || user.usertype === "Paid"){
-      let newUser = await userRepository.createUser(user);
-      return newUser;
-    }
-    return 400;
+  async deleteUser(user){
+    try{return await userRepository.deleteUser(user);}
+    catch(error) { return 400;}
   }
 }
 

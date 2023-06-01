@@ -6,21 +6,16 @@ class UserRepository {
     connect();
   }
 
-  async createUser(user){
-    let data = {}
-    try { data = await User.create(user) }
-    catch(err){ logger.error("Error::" + err); }
-    return data;
-  }
-
   async getUser(username){
     return await User.find({username:username});
   }
 
   async changeType(username, type){
-    console.log(username);
-    console.log(type);
     return await User.findOneAndUpdate({username:username}, type);
+  }
+  
+  async deleteUser(username){
+    return await User.deleteOne({username:username});
   }
 }
 
