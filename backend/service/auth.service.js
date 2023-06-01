@@ -2,8 +2,6 @@ const authenticationRepository = require("../repository/auth.repository");
 const jwt = require('jsonwebtoken');
 
 class AuthenticationService {
-  constructor() {}
-
   async loginUser(user) {
     let auth = await authenticationRepository.loginUser(user);
     if (auth !== 401) {

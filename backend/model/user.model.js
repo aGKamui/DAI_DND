@@ -20,7 +20,14 @@ const UserSchema = new Schema({
         type: String,
         required: [true, "User needs an email to log in"],
         unique: true
+    },
+    characters: {
+        type: Array
+    },
+    campaigns: {
+        type: Array
     }
+
 })
 
 const user = mongoose.model("user", UserSchema);
