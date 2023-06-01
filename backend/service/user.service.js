@@ -1,8 +1,6 @@
 const userRepository = require("../repository/user.repository");
 
 class UserService {
-  constructor(){}
-
   async getUser(username){
     let user = await userRepository.getUser(username);
     return user[0];

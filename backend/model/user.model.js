@@ -9,7 +9,7 @@ const UserSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ["Paid","Free"],
+        enum: ["Whale","Dophin","Free"],
         required: [true, "User needs a type (Paid or Free)"]
     },
     password: {
@@ -20,7 +20,14 @@ const UserSchema = new Schema({
         type: String,
         required: [true, "User needs an email to log in"],
         unique: true
+    },
+    characters: {
+        type: Array
+    },
+    campaigns: {
+        type: Array
     }
+
 })
 
 const user = mongoose.model("user", UserSchema);
