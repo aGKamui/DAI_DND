@@ -8,9 +8,8 @@ import testimage from '../../../assets/images/Fantasy_World.png';
 import testimage2 from '../../../assets/images/Fantasy_World2.png';
 import testimage3 from '../../../assets/images/Fantasy_World3.jpeg';
 
-
 type Props = {}
-const NewCharacterPage = (props: Props) => {
+const NewCampaignPage = (props: Props) => {
     const typographyStyle = {
         fontFamily: 'Josefin Sans',
         fontSize: '18px',
@@ -124,4 +123,4 @@ const NewCharacterPage = (props: Props) => {
     );
 };
 
-export default NewCharacterPage;
+export default NewCampaignPage;

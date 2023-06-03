@@ -8,6 +8,7 @@ import DashboardIndex from "../pages/dashboard/DashboardIndex.tsx";
 import Pricing from "../pages/dashboard/pricing/Pricing.js";
 import MyCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.tsx";
 import MyCampaignPage from "../pages/dashboard/campaigns/MyCampaignPage.tsx";
+import Perfil from "../pages/dashboard/perfil/Perfil.tsx";
 
 
 const appRoutes: RouteType[] = [
@@ -88,7 +89,7 @@ const appRoutes: RouteType[] = [
     },
     {
         path: "/dashboard/profile",
-        element: <ChangelogPage/>,
+        element: <Perfil/>,
         state: "dashboard.testepage",
         sidebarProps: {
             displayText: "Perfil",
