@@ -95,6 +95,15 @@ const appRoutes: RouteType[] = [
             displayText: "Perfil",
             icon: <DashboardOutLinedIcon/>
         }
+    },
+    {
+        path: "/dashboard/campaign_board",
+        element: <Perfil/>,
+        state: "dashboard.testepage",
+        sidebarProps: {
+            displayText: "Testing Grid",
+            icon: <DashboardOutLinedIcon/>
+        }
     }
 ];
 

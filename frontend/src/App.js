@@ -15,7 +15,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MainLayout from './components/layout/MainLayout.tsx';
 import HomePage from './pages/home/HomePage.tsx';
 import { routes } from './routes/index.tsx';
-import $ from "jquery";
 import SignIn from './pages/login/LoginPage.js';
 import Register from './pages/login/RegisterPage.js';
 import DefaultPage from './pages/dashboard/DefaultPage.tsx';
@@ -23,6 +22,8 @@ import Perfil from './pages/dashboard/perfil/Perfil.tsx';
 import NewCharacterPage from './pages/dashboard/character/edit/MyCharacterPage.tsx';
 import NewCampaignPage from './pages/dashboard/campaigns/MyCampaignPage.tsx';
 import Pricing from './pages/dashboard/pricing/Pricing.js';
+import GridPage from './pages/dashboard/grid/GridPage.tsx';
+
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
         <Route path="/dashboard/newCharacter" element={<NewCharacterPage />}/>  
         <Route path="/dashboard/MyCampaigns" element={<NewCampaignPage />}/>  
         <Route path="/dashboard/payments" element={<Pricing />}/>  
-        
+        <Route path="/dashboard/campaign_board" element={<GridPage />}/>
         
         <Route path='*' element={<Navigate to="/login" replace={true} />} /> 
         <Route path="/dashboard/profile" element={<Perfil />}/> 

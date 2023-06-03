@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import $ from "jquery";
+
 
 
 const defaultTheme = createTheme();
@@ -24,26 +24,6 @@ function Register() {
     console.log({
       email: data.get('email'),
       password: data.get('password'),
-    });
-
-    $.ajax({
-      method: 'POST',
-      dataType: 'json',
-      url: 'http://localhost:8000/api/auth/login',
-      contentType: 'application/json',
-      headers: {
-        'Access-Control-Allow-Credentials' : true ,
-        'Access-Control-Allow-Origin' : '*' ,
-        'Access-Control-Allow-Methods' : 'GET,OPTIONS,PATCH,DELETE,POST,PUT' ,
-        'Access-Control-Allow-Headers' : 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
-    },
-      cache: false,
-      data: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
-      success: function() {
-       
-
-      },
-      error: function(xhr, status, error) { console.log(error); }
     });
 
   };
