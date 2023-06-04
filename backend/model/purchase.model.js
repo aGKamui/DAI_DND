@@ -22,6 +22,6 @@ const PurchaseSchema = new Schema({
 
 })
 
-const user = mongoose.model("user", UserSchema);
+const purchase = mongoose.model("purchase", PurchaseSchema);
 
-module.exports = user;
+module.exports = purchase;
