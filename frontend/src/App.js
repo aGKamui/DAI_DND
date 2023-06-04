@@ -19,16 +19,24 @@ import $ from "jquery";
 import SignIn from './pages/login/LoginPage.js';
 import Register from './pages/login/RegisterPage.js';
 import DefaultPage from './pages/dashboard/DefaultPage.tsx';
-import SaaSPage from './pages/dashboard/SaasPage.tsx';
+import Perfil from './pages/dashboard/perfil/Perfil.tsx';
+import NewCharacterPage from './pages/dashboard/character/edit/MyCharacterPage.tsx';
+import NewCampaignPage from './pages/dashboard/campaigns/MyCampaignPage.tsx';
+import Pricing from './pages/dashboard/pricing/Pricing.js';
+
 function App() {
   return (
       <Routes>      
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<Register />}/>  
         <Route path="/dashboard" element={<DefaultPage />}/> 
-        <Route path="/dashboard/testepage" element={<SaaSPage />}/>  
+        <Route path="/dashboard/newCharacter" element={<NewCharacterPage />}/>  
+        <Route path="/dashboard/MyCampaigns" element={<NewCampaignPage />}/>  
+        <Route path="/dashboard/payments" element={<Pricing />}/>  
+        
+        
         <Route path='*' element={<Navigate to="/login" replace={true} />} /> 
-         
+        <Route path="/dashboard/profile" element={<Perfil />}/> 
       </Routes>
   );
 }
