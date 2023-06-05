@@ -2,26 +2,26 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const CharacterSchema = new Schema({
-    hitpoints:{
+    hitpoints: {
         type: [Number],
-        required: [true, "Character must have hitpoints"]
+        required: [True, "Character must have hitpoints"]
     },
     equipment:{
         type: Array
     },
     senses:{
         type: Array,
-        required: [true, "Character must have senses"]
+        required: [True, "Character must have senses"]
     },
     speedtypes:{
         type: Map,
         of: Number,
-        required: [true, "Character must have speed types"]
+        required: [True, "Character must have speed types"]
     },
     abilityscores:{
         type: Map,
         of: Number,
-        required: [true, "Character must have ability scores"]
+        required: [True, "Character must have ability scores"]
     },
     ancestryfeatures:{
         type: Array
@@ -31,11 +31,11 @@ const CharacterSchema = new Schema({
     },
     coreskills:{
         type: Map,
-        required: [true, "Character must have coreskills"]
+        required: [True, "Character must have coreskills"]
     },
     information:{
         type: Map,
-        required: [true, "Character must have information"]
+        required: [True, "Character must have information"]
     },
     inventory:{
         type: Array

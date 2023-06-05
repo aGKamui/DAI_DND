@@ -5,11 +5,7 @@ import DashboardOutLinedIcon from "@mui/icons-material/DashboardOutlined.js";
 import DashboardPageLayout from "../pages/dashboard/DashboardPageLayout.tsx";
 import DefaultPage from "../pages/dashboard/DefaultPage.tsx";
 import DashboardIndex from "../pages/dashboard/DashboardIndex.tsx";
-import Pricing from "../pages/dashboard/pricing/Pricing.js";
-import MyCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.tsx";
-import MyCampaignPage from "../pages/dashboard/campaigns/MyCampaignPage.tsx";
-import Perfil from "../pages/dashboard/perfil/Perfil.tsx";
-
+import ChangelogPage from "../pages/changelog/ChangelogPage.tsx";
 
 const appRoutes: RouteType[] = [
     {
@@ -30,11 +26,11 @@ const appRoutes: RouteType[] = [
                 state: "dashboard.index"
             },
             {
-                path: "/dashboard/myCampaigns",
-                element: <MyCampaignPage/>,
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
                 state: "dashboard.testepage",
                 sidebarProps: {
-                    displayText: "Ver Campanhas"
+                    displayText: "Continuar Campanha"
                 }
             },
             {
@@ -43,6 +39,14 @@ const appRoutes: RouteType[] = [
                 state: "dashboard.testepage",
                 sidebarProps: {
                     displayText: "Criar Campanha"
+                }
+            },
+            {
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
+                state: "dashboard.testepage",
+                sidebarProps: {
+                    displayText: "Eliminar Campanhas"
                 }
             }
         ]
@@ -69,30 +73,29 @@ const appRoutes: RouteType[] = [
                 }
             },
             {
-                path: "/dashboard/newCharacter",
-                element: <MyCharacterPage/>,
-                state: "dashboard.Mycharacterpage",
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
+                state: "dashboard.testepage",
                 sidebarProps: {
-                    displayText: "Editar personagens"
+                    displayText: "Editar personagem"
+                }
+            },
+            {
+                path: "/dashboard/testepage",
+                element: <DefaultPage/>,
+                state: "dashboard.testepage",
+                sidebarProps: {
+                    displayText: "Eliminar personagem"
                 }
             }
         ]
     },    
     {
-        path: "/dashboard/payments",
-        element: <Pricing/>,
+        path: "/changelog",
+        element: <ChangelogPage/>,
         state: "changelog",
         sidebarProps: {
             displayText: "Subscrição",
-            icon: <DashboardOutLinedIcon/>
-        }
-    },
-    {
-        path: "/dashboard/profile",
-        element: <Perfil/>,
-        state: "dashboard.testepage",
-        sidebarProps: {
-            displayText: "Perfil",
             icon: <DashboardOutLinedIcon/>
         }
     }
