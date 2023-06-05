@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+.Body {
+  padding-left: 315px;
+  padding-top: 25px;
+  font-size: 35px;
+  text-align: center;
+  font-family: 'Josefin Sans', cursive;
+}
+.DeleteButton {
+  padding-left: 155px;
+  display: absolute;
+  
+}
+
+h5{
+  font-family: 'Josefin Sans', cursive;
+}
