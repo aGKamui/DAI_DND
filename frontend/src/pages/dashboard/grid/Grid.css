@@ -1,17 +1,40 @@
-.container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-  }
+.grid-container {
   
-  .box {
-    border: 3px solid #666;
-    background-color: #ddd;
-    border-radius: .5em;
-    padding: 10px;
-    cursor: move;
-  }
+  display: grid;
+  
+  grid-gap: 1px;
+  
+  display: grid;
+  grid-template-columns: repeat(30, 2fr);
+  grid-template-rows: repeat(30, 50px);
+  grid-auto-rows: 150px;
+  background-image: url("https://i.kym-cdn.com/editorials/icons/original/000/005/282/swmg.jpg");
+  background-repeat: no-repeat;
+  background-color: rgb(248, 248, 248);
+  
+  
+}
 
-  .box.over {
-    border: 3px dotted #666;
-  }
+.grid-item {
+  background-image: url("https://i.kym-cdn.com/editorials/icons/original/000/005/282/swmg.jpg");
+  border: 1px;
+  border-color: aliceblue;
+  background-attachment: fixed;
+  height: 50px;
+  font-size: 30px;
+  text-align: center;
+  background-repeat: no-repeat;
+
+  color: aliceblue;
+ 
+}
+
+.handle {
+  background-image: url("https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png");
+  
+  background-repeat: no-repeat;
+  color: aliceblue;
+  height: 50px;
+  font-size: 12px;
+  text-align: center;
+}
