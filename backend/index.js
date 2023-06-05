@@ -6,6 +6,7 @@ const authenticationRoutes = require("./route/auth.route");
 const userRoutes = require("./route/user.route");
 const diceRoutes = require("./route/dice.route");
 const logger = require("./logger/api.logger");
+const characterRoutes = require("./route/character.route");
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -35,6 +36,8 @@ app.use("/api/auth", authenticationRoutes);
 app.use("/api/user", userRoutes);
 
 app.use("/api/dice", diceRoutes);
+
+app.use("/api/character", characterRoutes); 
 
 
 app.get("/random", (req, res) => {
