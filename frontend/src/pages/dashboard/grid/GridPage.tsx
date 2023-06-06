@@ -25,8 +25,13 @@ export default function App() {
 
     
     <div >
-      <div className="grid">
-      <Grid count= {400}>
+      <div 
+        className="grid" 
+        style={{
+            width: 1200,
+            height: 675,
+      }}>
+      <Grid count= {325}>
 
       </Grid>
       </div>
@@ -45,9 +50,12 @@ export default function App() {
         onDrag={handleDrag}
         onStop={handleStop}
       >
-        <div>
-        <div className="handle"></div>  
-        </div>
+        <div 
+        className="handle"         
+        style={{
+          width: 50,
+          height: 50,
+        }}/>  
       
 
       </Draggable>
