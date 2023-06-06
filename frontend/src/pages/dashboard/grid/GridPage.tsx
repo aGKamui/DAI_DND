@@ -1,19 +1,11 @@
 import React from "react";
 import Draggable from "react-draggable";
 import $ from "jquery";
-
+import Grid from "./Grid";
 import "./Grid.css"
 
 
-function createGrid(x) {
-  for (var rows = 0; rows < x; rows++) {
-      for (var columns = 0; columns < x; columns++) {
-          $("#container").append("<div class='grid'></div>");
-      };
-  };
-  $(".grid").width(960/x);
-  $(".grid").height(960/x);
-};
+
 
 export default function App() {
   const handleStart = (e, data) => {
@@ -32,10 +24,12 @@ export default function App() {
   return (
 
     
-    <div className="grid-container">
+    <div >
+      <div className="grid">
+      <Grid count= {400}>
 
-
-
+      </Grid>
+      </div>
 
 
 
@@ -45,7 +39,7 @@ export default function App() {
         handle=".handle"
         defaultPosition={{ x: 0, y: 0 }}
         position={null}
-        grid={[(window.innerWidth/30)-0.5, 51]}
+        grid={[(window.innerWidth/30), 50]}
         scale={1}
         onStart={handleStart}
         onDrag={handleDrag}
