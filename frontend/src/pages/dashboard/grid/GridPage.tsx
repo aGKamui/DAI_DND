@@ -44,7 +44,7 @@ export default function App() {
         handle=".handle"
         defaultPosition={{ x: 0, y: 0 }}
         position={null}
-        grid={[24, 14]}
+        grid={[(window.innerWidth/30), 50]}
         scale={1}
         onStart={handleStart}
         onDrag={handleDrag}
