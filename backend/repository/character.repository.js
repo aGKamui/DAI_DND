@@ -57,6 +57,18 @@ class CharacterRepository {
   }
 
 
+  async changeCharacter(username, changes, character_id){
+    let character;
+    try { character = await Character.findById(character_id); } 
+    catch (error) { console.log("Character not found, id:", character_id); }
+    if (character == undefined) { return 403 }
+    for (const type in changes) {
+      if (character[type] == undefined) { return 400 }
+      character[type] = changes[type]
+    }
+    let result = await character.save();
+    return result;
+  }
 }
 
 
