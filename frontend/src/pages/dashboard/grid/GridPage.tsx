@@ -31,7 +31,7 @@ export default function App() {
             width: 1200,
             height: 675,
       }}>
-      <Grid count= {325}>
+      <Grid count= {336}>
 
       </Grid>
       </div>
@@ -44,7 +44,7 @@ export default function App() {
         handle=".handle"
         defaultPosition={{ x: 0, y: 0 }}
         position={null}
-        grid={[(window.innerWidth/30), 50]}
+        grid={[24, 14]}
         scale={1}
         onStart={handleStart}
         onDrag={handleDrag}

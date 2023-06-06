@@ -5,10 +5,11 @@
   grid-gap: 1px;
   
   display: grid;
-  grid-template-columns: repeat(30, 2fr);
-  grid-template-rows: repeat(10, 50px);
+  grid-template-columns: repeat(24, 50px);
+  grid-template-rows: repeat(14, 50px);
   grid-auto-rows: 150px;
-  
+
+  box-sizing: border-box;
   background-repeat: no-repeat;
   background-color: rgb(248, 248, 248);
   background-image: url("https://i.kym-cdn.com/editorials/icons/original/000/005/282/swmg.jpg");
