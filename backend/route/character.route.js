@@ -8,19 +8,16 @@ router.get("/", async (req, res) => {
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");
     }
-    console.log(req.params.id)
     let characters = await characterController.getCharacter(AuthedUser.username, req.params.id);
     if (Number.isInteger(characters)) { return res.sendStatus(characters); }
     res.json(characters);
 });
 
 router.get("/:id", async (req, res) => {
-    AuthedUser = authService.verifyToken(req.headers.auth);
+    AuthedUser = await authService.verifyToken(req.headers.auth);
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");
     }
-    console.log(req.params.id);
-    console.log(AuthedUser);
     let characters = await characterController.getCharacter(AuthedUser.username, req.params.id);
     if (Number.isInteger(characters)) { return res.sendStatus(characters); }
     res.json(characters);
