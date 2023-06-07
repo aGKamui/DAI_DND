@@ -3,21 +3,13 @@ import Draggable from "react-draggable";
 import $ from "jquery";
 import Grid from "./Grid";
 import "./Grid.css"
+import ToolBar from "./ToolBar";
 
 
 
 
 export default function App() {
-  const handleStart = (e, data) => {
-    console.log(e, data);
-  };
-  const handleDrag = (e, data) => {
-    console.log(e, data);
-  };
-  const handleStop = (e, data) => {
-    console.log(e, data);
-  };
-
+  
   
 
   
@@ -25,42 +17,27 @@ export default function App() {
 
     
     <div >
+
+      <ToolBar></ToolBar>
+
       <div 
         className="grid" 
         style={{
             width: 1200,
-            height: 675,
+            height: 715,
       }}>
-      <Grid count= {336}>
 
+
+      <Grid count= {336}>
       </Grid>
       </div>
 
-
-
-
-  <Draggable
-        axis="both"
-        handle=".handle"
-        defaultPosition={{ x: 0, y: 0 }}
-        position={null}
-        grid={[(window.innerWidth/30), 50]}
-        scale={1}
-        onStart={handleStart}
-        onDrag={handleDrag}
-        onStop={handleStop}
-      >
-        <div 
-        className="handle"         
-        style={{
-          width: 50,
-          height: 50,
-        }}/>  
+    <div className="tool-box"></div>
       
 
-      </Draggable>
+  
     </div>
-
+   
     
     
   );

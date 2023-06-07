@@ -6,15 +6,15 @@
   
   display: grid;
   grid-template-columns: repeat(24, 50px);
-  grid-template-rows: repeat(14, 50px);
-  grid-auto-rows: 150px;
+  grid-template-rows: repeat(13, 50px);
+  
 
   box-sizing: border-box;
   background-repeat: no-repeat;
   background-color: rgb(248, 248, 248);
   background-position: center;
   background-image: url("https://i.kym-cdn.com/editorials/icons/original/000/005/282/swmg.jpg");
-  background-size: 1000 600;
+  background-size: cover;
   
   
 }
@@ -42,4 +42,26 @@
   height: 50px;
   font-size: 30px;
   text-align: center;
+}
+
+.tool-bar{
+  right: 0;
+  padding: 10px;
+  position:fixed;
+  background-color: grey;
+  opacity: 0.9;
+}
+
+.roll{
+  background-color: black;
+  border: none;
+  color: white;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display:;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  
 }
