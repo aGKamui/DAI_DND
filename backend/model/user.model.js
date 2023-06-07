@@ -26,6 +26,9 @@ const UserSchema = new Schema({
     },
     campaigns: {
         type: Array
+    },
+    token: {
+        type: String
     }
 
 })

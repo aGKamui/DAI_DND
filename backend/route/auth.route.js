@@ -1,31 +1,93 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../model/user.model.js");
+const user = require("../model/user.model.js");
 const router = express.Router();
-const authController = require("../controller/auth.controller");
+require("dotenv").config();
 
-router.post("/register/", async (req, res) => {
-  console.log(req.body);
-  await authController.createUser(req.body).then((data) => res.json(data));
+router.post("/login", async (req, res) => {
+  // Our login logic starts here
+  try {
+    // Get user input
+    const { username, password } = req.body;
+    // Validate user input
+    if (!(username && password)) {
+      res.status(400).send("All input is required");
+    }
+    // Validate if user exist in our database
+    const user = await User.findOne({ "username": username });
+    if (user && bcrypt.compare(password, user.password)) {
+      // Create token
+      const token = jwt.sign(
+        { username: user.username, email: user.email },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "2h",
+        }
+      );
+      // save user token
+      user.token = token;
+
+      await User.findOneAndUpdate({"username" : username}, {"token": token})
+      // user
+      res.status(200).json(user);          
+    }else{
+      res.status(400).send("Invalid Credentials");   
+    }
+    
+  } catch (err) {
+    console.log(err);
+  }
+  // Our register logic ends here
 });
 
-router.post("/login/", async (req, res) => {
-  console.log(req.body);
-  let auth = await authController.loginUser(req.body);
-  if (auth === 401) { res.status(auth).sendStatus(401); }
-  else{
-    const { username, token } = auth;   
-    req.session.user = {username, token};
-    res.json(auth);
-  }
-});
+router.post("/register", async (req, res) => {
+  // Our register logic starts here
+  try {
+    // Get user input
+    const { first_name, last_name, email, password } = req.body;
 
-//! this is to test session, delete later!!
-router.get("/protect/", async (req, res) => {
-  if (req.session.user) {
-    let verifyToken = await authController.verifyUser(req.session.user.token)
-    if (verifyToken === 401) { res.sendStatus(401); }
-    else{ res.json({}) }
+    // Validate user input
+    if (!(email && password && first_name && last_name)) {
+      res.status(400).send("All input is required");
+    }
+
+    // Check if user already exist
+    // Validate if user exist in our database
+    const oldUser = await User.findOne({ email });
+
+    if (oldUser) {
+      return res.status(409).send("User Already Exist. Please Login");
+    }
+
+    // Encrypt user password
+    encryptedPassword = await bcrypt.hash(password, 10);
+
+    // Create user in our database
+    const user = await User.create({
+      first_name,
+      last_name,
+      email: email.toLowerCase(), // sanitize: convert email to lowercase
+      password: encryptedPassword,
+    });
+
+    // Create token
+    const token = jwt.sign(
+      { user_id: user._id, email },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "2h" }
+    );
+
+    // save user token
+    user.token = token;
+
+    // return new user
+    res.status(201).json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(201).json({ message: err.message });
   }
-  else { res.sendStatus(401); }
 });
 
 module.exports = router;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter, Routes, Route, Navigate  } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -24,18 +24,21 @@ import NewCharacterPage from './pages/dashboard/character/edit/MyCharacterPage.t
 import NewCampaignPage from './pages/dashboard/campaigns/MyCampaignPage.tsx';
 import Pricing from './pages/dashboard/pricing/Pricing.js';
 import EditCharacterPage from './pages/dashboard/character/edit/EditCharacterPage.tsx';
+
+
+
 function App() {
   return (
-      <Routes>      
+      <Routes>
         <Route path="/login" element={<SignIn />} />
-        <Route path="/register" element={<Register />}/>  
-        <Route path="/dashboard" element={<DefaultPage />}/> 
-        <Route path="/dashboard/myCharacters" element={<NewCharacterPage />}/>  
-        <Route path="/dashboard/MyCampaigns" element={<NewCampaignPage />}/>  
-        <Route path="/dashboard/payments" element={<Pricing />}/>  
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<DefaultPage />} />
+        <Route path="/dashboard/myCharacters" element={<NewCharacterPage />} />
+        <Route path="/dashboard/MyCampaigns" element={<NewCampaignPage />} />
+        <Route path="/dashboard/payments" element={<Pricing />} />
         <Route path="/dashboard/myCharacters/:id" element={<EditCharacterPage />} />
         {/*<Route path='*' element={<Navigate to="/login" replace={true} />} /> */}
-        <Route path="/dashboard/profile" element={<Perfil />}/> 
+        <Route path="/dashboard/profile" element={<Perfil />} />
       </Routes>
   );
 }

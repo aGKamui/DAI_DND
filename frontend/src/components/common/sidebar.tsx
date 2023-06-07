@@ -1,5 +1,5 @@
 import { Avatar, Drawer, List, ListItemButton, ListItemIcon, Stack, Toolbar } from '@mui/material';
-import React from 'react'
+import React, { useContext } from 'react'
 import sizeConfigs from '../../config/sizeConfig.ts';
 import colorConfigs from '../../config/colorConfig.ts';
 import appRoutes from '../../routes/appRoutes.tsx';
@@ -8,6 +8,7 @@ import SidebarItem from './SidebarItem.tsx';
 import SidebarItemCollapse from './SidebarItemCollapse.tsx';
 
 const Sidebar = () => {
+   
     return (
         <Drawer
             variant='permanent'
