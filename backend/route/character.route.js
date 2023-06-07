@@ -24,7 +24,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    AuthedUser = authService.verifyToken(req.headers.auth);
+    AuthedUser = await authService.verifyToken(req.headers.auth);
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");
     }
@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-    AuthedUser = authService.verifyToken(req.headers.auth);
+    AuthedUser = await authService.verifyToken(req.headers.auth);
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");
     }
