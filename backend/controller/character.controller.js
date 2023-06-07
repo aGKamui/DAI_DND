@@ -8,8 +8,12 @@ class CharacterController {
 
   };
 
-  async createCharacter(user, character) {
-    return await characterService.createCharacter(user, character);
+  async createCharacter(username, character) {
+    return await characterService.createCharacter(username, character);
+  };
+
+  async changeCharacter(username, changes, character_id) {
+    return await characterService.changeCharacter(username, changes, character_id);
   };
 
 }
