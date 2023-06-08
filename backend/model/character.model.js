@@ -47,11 +47,11 @@ const CharacterSchema = new Schema({
         type: Map,
         of: Number
     },
-    Resistances:{
+    resistances:{
         type: Map,
         of: Number
     },
-    Immunities:{
+    immunities:{
         type: Array
     }
     

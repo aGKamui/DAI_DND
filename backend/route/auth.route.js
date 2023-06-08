@@ -20,7 +20,7 @@ router.post("/login", async (req, res) => {
     if (user && bcrypt.compare(password, user.password)) {
       // Create token
       const token = jwt.sign(
-        { username: user.username, email: user.email },
+        { username: user.username },
         process.env.JWT_SECRET_KEY,
         {
           expiresIn: "2h",
@@ -37,23 +37,30 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  // Our register logic ends here
+  // Our login logic ends here
 });
 
 router.post("/register", async (req, res) => {
   // Our register logic starts here
   try {
     // Get user input
-    const { first_name, last_name, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     // Validate user input
-    if (!(email && password && first_name && last_name)) {
-      res.status(400).send("All input is required");
-    }
+    if (!email || !password || !username){
+      return res.status(400).send("All input is required");
+    };
 
     // Check if user already exist
-    // Validate if user exist in our database
-    const oldUser = await User.findOne({ email });
+    // Validate if user with the same email exists in our database
+    let oldUser = await User.findOne({ email });
+
+    if (oldUser) {
+      return res.status(409).send("User Already Exist. Please Login");
+    }
+    
+    // Validate if user with the same username exists in our database
+    oldUser = await User.findOne({ username });
 
     if (oldUser) {
       return res.status(409).send("User Already Exist. Please Login");
@@ -64,15 +71,15 @@ router.post("/register", async (req, res) => {
 
     // Create user in our database
     const user = await User.create({
-      first_name,
-      last_name,
+      username: username,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password: encryptedPassword,
+      type: "Free"
     });
 
     // Create token
     const token = jwt.sign(
-      { user_id: user._id, email },
+      {user_id: user.username},
       process.env.JWT_SECRET_KEY,
       { expiresIn: "2h" }
     );
@@ -85,7 +92,6 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(201).json({ message: err.message });
-  }
-});
+}});
 
 module.exports = router;
