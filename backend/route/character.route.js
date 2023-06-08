@@ -15,8 +15,6 @@ const Validate = function(token) {
 router.get("/", async (req, res) => {
     AuthedUser = Validate(req.headers.authorization);
     if (AuthedUser) {
-        console.log("ENTREI CRL")
-
         let characters = await characterController.getCharacter(AuthedUser.username, req.params.id);
         if (Number.isInteger(characters)) { return res.sendStatus(characters); }
         res.json(characters);

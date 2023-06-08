@@ -29,8 +29,6 @@ router.post("/login", async (req, res) => {
       // save user token
       user.token = token;
 
-      await User.findOneAndUpdate({"username" : username}, {"token": token})
-      // user
       res.status(200).json(user);          
     }else{
       res.status(400).send("Invalid Credentials");   
