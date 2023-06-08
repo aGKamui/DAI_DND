@@ -5,7 +5,6 @@ class CharacterController {
 
   async getCharacter(username, character_id) {
     return await characterService.getCharacter(username, character_id);
-
   };
 
   async createCharacter(username, character) {
@@ -14,6 +13,10 @@ class CharacterController {
 
   async changeCharacter(username, changes, character_id) {
     return await characterService.changeCharacter(username, changes, character_id);
+  };
+
+  async delCharacter(username, character_id) {
+    return await characterService.delCharacter(username, character_id);
   };
 
 }

@@ -18,10 +18,21 @@ router.get("/:id", async (req, res) => {
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");
     }
-    let characters = await characterController.getCharacter(AuthedUser.username, req.params.id);
+    let character = await characterController.getCharacter(AuthedUser.username, req.params.id);
+    if (Number.isInteger(character)) { return res.sendStatus(character); }
+    res.json(character);
+});
+
+router.delete("/:id", async (req, res) => {
+    AuthedUser = await authService.verifyToken(req.headers.auth);
+    if(AuthedUser === 401){
+        return res.status(401).send("Invalid Token.");
+    }
+    let characters = await characterController.delCharacter(AuthedUser.username, req.params.id);
     if (Number.isInteger(characters)) { return res.sendStatus(characters); }
     res.json(characters);
 });
+
 
 router.post("/", async (req, res) => {
     AuthedUser = await authService.verifyToken(req.headers.auth);
