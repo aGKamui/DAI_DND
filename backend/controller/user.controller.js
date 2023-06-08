@@ -12,5 +12,8 @@ class UserController {
   async deleteUser(user){
     return await userService.deleteUser(user);
   }
+  async getUserValue(username, value){
+    return (await userService.getUser(username))[value];
+  }
 }
 module.exports = new UserController();

@@ -7,6 +7,10 @@ class CharacterController {
     return await characterService.getCharacter(username, character_id);
   };
 
+  async getCharacterValue(username, character_id, value) {
+    return (await characterService.getCharacter(username, character_id))[value];
+  };
+
   async createCharacter(username, character) {
     return await characterService.createCharacter(username, character);
   };
