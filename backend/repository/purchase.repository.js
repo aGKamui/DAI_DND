@@ -8,7 +8,7 @@ class PurchaseRepository {
     }
 
     async createPurchase( purchaseInfo, username){
-        const user = await User.findOne({username: username});
+        const user = await User.findOneAndUpdate({username: username}, {type: purchaseInfo.type});
         purchaseInfo.user = user._id
         return await Purchase.create(purchaseInfo);
     }
