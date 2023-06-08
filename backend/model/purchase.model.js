@@ -12,11 +12,11 @@ const PurchaseSchema = new Schema({
         required: [true, "Purchase must be made by someone"]
     },
     date:{
-        type: date,
+        type: Date,
         required: [true, "Purchase needs a date"]
     },
     value:{
-        type: number,
+        type: Number,
         required: [true, "Purchase needs a value"]
     }
 

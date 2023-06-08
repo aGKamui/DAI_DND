@@ -7,9 +7,8 @@ class UserService {
   }
 
   async changeType(username, type){
-    if(type.type === "Free" || type.type === "Paid"){
-      let updatedUser = await userRepository.changeType(username, type);
-      return updatedUser;
+    if(type.type === "Free" || type.type === "Dolphin" || type.type === "Whale"){
+      return await userRepository.changeType(username, type);
     }
     return 400;
   }

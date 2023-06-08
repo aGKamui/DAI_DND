@@ -55,19 +55,15 @@ router.post("/register", async (req, res) => {
 
     // Check if user already exist
     // Validate if user with the same email exists in our database
-    let oldUser = await User.findOne({ email });
-
-    if (oldUser) {
-      return res.status(409).send("User Already Exist. Please Login");
-    }
+    let usedEmail = await User.findOne({ email });
     
     // Validate if user with the same username exists in our database
-    oldUser = await User.findOne({ username });
+    let usedUsername = await User.findOne({ username});
 
-    if (oldUser) {
+    if (usedEmail || usedUsername) {
       return res.status(409).send("User Already Exist. Please Login");
     }
-
+  
     // Encrypt user password
     encryptedPassword = await bcrypt.hash(password, 10);
 

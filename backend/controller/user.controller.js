@@ -2,8 +2,7 @@ const userService = require("../service/user.service");
 
 class UserController {
   async getUser(username) {
-    let user = await userService.getUser(username);
-    return user;
+    return await userService.getUser(username);
   }
 
   async changeType(username, type){
