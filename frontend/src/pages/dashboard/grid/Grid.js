@@ -27,8 +27,8 @@ const Grid = ({ count }) => {
       <div 
         className="grid-container"
         style={{
-          width: 1225,
-          height: 715,
+          width: 1224,
+          height: 714,
       }}>
         
         {numbers}

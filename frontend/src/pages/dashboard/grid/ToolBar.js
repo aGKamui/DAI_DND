@@ -1,15 +1,21 @@
 import React from "react";
 import "./Grid.css"
+import Popup from "./popup.js";
 const ToolBar = () => {
 
     return(
 
-        <div className="tool-bar">
+        <div className="tool-bar" >
 
             Tool Bar 
-            <p className="roll"><a>Roll</a></p>
-            <p className="roll"><a>Add</a></p>
-            <p className="roll"><a>Remove</a></p>
+
+
+            <Popup desc_Botao={"Roll"}></Popup>
+            <Popup desc_Botao={"Add"}></Popup>
+            <Popup desc_Botao={"Remove"}></Popup>
+            <Popup desc_Botao={"Background"}></Popup>
+            
+            
             
             
 
