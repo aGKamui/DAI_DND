@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const PurchaseSchema = new Schema({
     type:{
         type: String,
-        enum: ["Whale","Dophin"],
+        enum: ["Whale","Dolphin"],
         required: [true, "Purchase needs a type (Whale tier or Dolphin tier)"]
     },
     user:{
