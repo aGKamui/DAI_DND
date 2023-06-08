@@ -1,10 +1,12 @@
 import React from "react";
 import Draggable from "react-draggable";
+import Popup from "./popup-right.js";
 
 
 
 const Grid = ({ count }) => {
     const numbers = [];
+    let tokens = [ <Popup/>, <Popup/>, <Popup/>, <Popup/>, <Popup/>, <Popup/>];
 
     const handleStart = (e, data) => {
       console.log(e, data);
@@ -20,7 +22,12 @@ const Grid = ({ count }) => {
     for (let i = 1; i <= count; i++) {
       numbers.push(<div className="grid-item"></div>);
     }
-  
+    
+    //Função para ir buscar à base de dados tokens
+    //Varredura aqui
+    //Mete tudo para o array tokens
+    //Baam já tá
+
     return (
 
 
@@ -32,46 +39,9 @@ const Grid = ({ count }) => {
       }}>
         
         {numbers}
-        <Draggable
-        axis="both"
-        handle=".handle"
-        defaultPosition={{ x: 0, y: 0 }}
-        position={null}
-        grid={[51, 51]}
-        scale={1}
-        onStart={handleStart}
-        onDrag={handleDrag}
-        onStop={handleStop}
-      >
-        <div 
-        className="handle"         
-        style={{
-          width: 50,
-          height: 50,
-        }}/>  
-      
+        {tokens}
+        
 
-      </Draggable>
-      <Draggable
-        axis="both"
-        handle=".handle"
-        defaultPosition={{ x: 0, y: 0 }}
-        position={null}
-        grid={[51, 51]}
-        scale={1}
-        onStart={handleStart}
-        onDrag={handleDrag}
-        onStop={handleStop}
-      >
-        <div 
-        className="handle"         
-        style={{
-          width: 50,
-          height: 50,
-        }}/>  
-      
-
-      </Draggable>
       </div>
     );
   };
