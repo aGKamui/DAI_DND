@@ -6,7 +6,8 @@ const userRoutes = require("./route/user.route");
 const diceRoutes = require("./route/dice.route");
 const logger = require("./logger/api.logger");
 const characterRoutes = require("./route/character.route");
-const purchaseRoutes = require("./route/purchase.route")
+const purchaseRoutes = require("./route/purchase.route");
+const campaignRoutes = require("./route/campaign.route");
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -32,6 +33,8 @@ app.use("/api/dice", diceRoutes);
 app.use("/api/character", characterRoutes); 
 
 app.use("/api/purchase", purchaseRoutes);
+
+app.use("/api/campaign", campaignRoutes);
 
 app.get("/random", (req, res) => {
   res.status = 418;

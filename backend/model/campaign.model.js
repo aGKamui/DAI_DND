@@ -12,6 +12,9 @@ const CampaignSchema = new Schema({
     },
     characters: {
         type: Array
+    },
+    scenes:{
+        type: Array
     }
 })
 
