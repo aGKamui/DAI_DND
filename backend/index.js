@@ -8,6 +8,9 @@ const logger = require("./logger/api.logger");
 const characterRoutes = require("./route/character.route");
 const purchaseRoutes = require("./route/purchase.route");
 const campaignRoutes = require("./route/campaign.route");
+const sceneRoutes = require("./route/scene.route");
+
+
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -24,6 +27,8 @@ app.use(cors({
 }));
 
 
+app.use(express.static('public'))
+
 app.use("/api/auth", authenticationRoutes);
 
 app.use("/api/user", userRoutes);
@@ -35,6 +40,8 @@ app.use("/api/character", characterRoutes);
 app.use("/api/purchase", purchaseRoutes);
 
 app.use("/api/campaign", campaignRoutes);
+
+app.use("/api/scene", sceneRoutes);
 
 app.get("/random", (req, res) => {
   res.status = 418;
