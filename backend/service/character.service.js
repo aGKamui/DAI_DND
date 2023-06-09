@@ -15,6 +15,11 @@ class CharacterService {
     let user = await characterRepository.changeCharacter(username, changes, character_id);
     return user;
   }
+
+  async delCharacter(username, character_id){
+    let character = await characterRepository.delCharacter(username, character_id);
+    return character;
+  }
 }
 
 module.exports = new CharacterService();

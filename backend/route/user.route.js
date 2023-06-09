@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
         return res.status(401).send("Invalid Token.");
     }
     await userController.getUser(AuthedUser.username).then((data) => res.status(200).json(data));
-    });
+});
 
 router.put("/update", async(req, res) => {
     AuthedUser = await authService.verifyToken(req.headers.auth);
@@ -31,5 +31,13 @@ router.delete("/delete", async(req, res) => {
     let data = await userController.deleteUser(AuthedUser.username);
     res.status(204).json(data);
 })
+
+router.get("/:value", async (req, res) => {
+    AuthedUser = await authService.verifyToken(req.headers.auth);
+    if(AuthedUser === 401){
+        return res.status(401).send("Invalid Token.");
+    }
+    await userController.getUserValue(AuthedUser.username, req.params.value).then((data) => res.status(200).json(data));
+});
 
 module.exports = router;
