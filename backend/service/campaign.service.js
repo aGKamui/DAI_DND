@@ -113,6 +113,30 @@ class CampaignService{
         }
         return true
     }
+
+    async getCampaigns(username){
+        const user = await userRepository.getUser(username);
+        let campaigns = []
+        const playsIn = await this.getCampaignIdsByCharacterList(user.characters)
+        if(playsIn){
+            (playsIn).forEach((element) => {
+                campaigns.push(element);
+            });
+        }
+        const owns = user.campaigns
+        if(owns){
+            user.campaigns.forEach((element) => {
+                campaigns.push(element);
+            });
+        }
+        if(campaigns){
+            for(let index = 0; index < campaigns.length; index++){
+                campaigns[index] = await campaignRepository.getCampaign(campaigns[index]);
+            }
+        }
+        
+        return campaigns;
+    }
 }
 
 module.exports = new CampaignService();

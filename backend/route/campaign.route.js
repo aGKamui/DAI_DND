@@ -48,4 +48,12 @@ router.put("/:id", async (req, res) => {
     return res.status(200).json(campaign);
 })
 
+router.get("/", async(req, res) => {
+    AuthedUser = await authService.verifyToken(req.headers.auth);
+    if(AuthedUser === 401){
+        return res.status(401).send("Invalid Token.");
+    }
+    return res.json(await campaignController.getCampaigns(AuthedUser.username))
+})
+
 module.exports = router;
