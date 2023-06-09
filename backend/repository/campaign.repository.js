@@ -8,9 +8,17 @@ class CampaignRepository {
 
     async createCampaign( campaignInfo, scene){
         let campaign = await Campaign.create(campaignInfo);
-        campaign.scene = [scene];
+        campaign.scenes = [scene];
         await Campaign.updateOne({_id: campaign._id}, campaign);
         return campaign;
+    }
+
+    async getCampaign(campaignId){
+        try{
+            return await Campaign.findOne({_id: campaignId})
+        }catch{
+            return 404
+        }
     }
 }
 

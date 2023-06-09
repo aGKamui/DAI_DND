@@ -4,8 +4,7 @@ require("dotenv").config();
 
 class UserService {
   async getUser(username){
-    let user = await userRepository.getUser(username);
-    return user[0];
+    return await userRepository.getUser(username);;
   }
 
   async update(username, toChange){

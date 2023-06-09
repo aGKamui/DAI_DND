@@ -7,7 +7,7 @@ class UserRepository {
   }
 
   async getUser(username){
-    return await User.find({username:username});
+    return await User.findOne({username:username});
   }
 
   async update(username, toChange){
