@@ -5,8 +5,8 @@ class UserController {
     return await userService.getUser(username);
   }
 
-  async changeType(username, type){
-    return await userService.changeType(username, type);
+  async update(username, toChange){
+    return await userService.update(username, toChange);
   }
 
   async deleteUser(user){

@@ -2,7 +2,6 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/user.model.js");
-const user = require("../model/user.model.js");
 const router = express.Router();
 require("dotenv").config();
 
@@ -17,7 +16,7 @@ router.post("/login", async (req, res) => {
     }
     // Validate if user exist in our database
     const user = await User.findOne({ "username": username });
-    if (user && bcrypt.compare(password, user.password)) {
+    if (user && bcrypt.compare(password + process.env.PASSWORD_SECRET, user.password)) {
       // Create token
       const token = jwt.sign(
         { username: user.username },
@@ -63,7 +62,7 @@ router.post("/register", async (req, res) => {
     }
   
     // Encrypt user password
-    encryptedPassword = await bcrypt.hash(password, 10);
+    encryptedPassword = await bcrypt.hash(password + process.env.PASSWORD_SECRET, 10);
 
     // Create user in our database
     const user = await User.create({

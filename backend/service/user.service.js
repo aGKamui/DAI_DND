@@ -1,4 +1,6 @@
 const userRepository = require("../repository/user.repository");
+const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 class UserService {
   async getUser(username){
@@ -6,11 +8,23 @@ class UserService {
     return user[0];
   }
 
-  async changeType(username, type){
-    if(type.type === "Free" || type.type === "Dolphin" || type.type === "Whale"){
-      return await userRepository.changeType(username, type);
+  async update(username, toChange){
+    const {password, email, type} = toChange
+    let emailIsUsed
+    try{
+      (await userRepository.exists({ email: email })).email;
+      emailIsUsed = true;
+    }catch{
+      emailIsUsed = false;
     }
-    return 400;
+    console.log(emailIsUsed);
+    if((!type && !email && !password) || (type && !(type === 'Free' || type === 'Dolphin' || type === 'Whale')) || emailIsUsed){
+      return 400;
+    }
+    if(password){
+      toChange.password = await bcrypt.hash(password + process.env.PASSWORD_SECRET, 10)
+    }
+    return await userRepository.update(username, toChange);
   }
 
   async deleteUser(user){
