@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");
     }
-    let characters = await characterController.getCharacter(AuthedUser.username, req.params.id);
+    let characters = await characterController.getCharacter(AuthedUser.username);
     if (Number.isInteger(characters)) { return res.sendStatus(characters); }
     res.json(characters);
 });
