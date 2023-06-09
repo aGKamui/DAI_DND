@@ -20,6 +20,14 @@ class CampaignRepository {
             return 404
         }
     }
+
+    async updateCampaign(campaignId, toChange){
+        return await Campaign.findOneAndUpdate({_id: campaignId}, toChange)
+    }
+
+    async getAll(){
+        return await Campaign.find()
+    }
 }
 
 module.exports = new CampaignRepository();

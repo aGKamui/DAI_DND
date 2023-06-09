@@ -24,8 +24,26 @@ router.get("/:id", async (req, res) => {
     if(campaign === 404){
         return res.status(404).send("Campaign not found.");
     }
-    if(campaign === 401){
-        return res.status(401).send("Invalid Campaign.");
+    if(campaign === 403){
+        return res.status(403).send("You're not part of this campaign");
+    }
+    return res.status(200).json(campaign);
+})
+
+router.put("/:id", async (req, res) => {
+    AuthedUser = await authService.verifyToken(req.headers.auth);
+    if(AuthedUser === 401){
+        return res.status(401).send("Invalid Token.");
+    }
+    const campaign = await campaignController.updateCampaign(req.params.id, AuthedUser.username, req.body);
+    if(campaign === 404){
+        return res.status(404).send("Information not found.")
+    }
+    if(campaign === 403){
+        return res.status(401).send("You're not the owner of this campaign.")
+    }
+    if(campaign === 400){
+        return res.status(400).send("Invalid changes.")
     }
     return res.status(200).json(campaign);
 })

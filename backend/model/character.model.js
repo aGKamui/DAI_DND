@@ -6,9 +6,6 @@ const CharacterSchema = new Schema({
         type: [Number],
         required: [true, "Character must have hitpoints"]
     },
-    equipment:{
-        type: Array
-    },
     senses:{
         type: Array,
         required: [true, "Character must have senses"]
@@ -44,15 +41,16 @@ const CharacterSchema = new Schema({
         type: Array
     },
     weaknesses:{
-        type: Map,
-        of: Number
+        type: Array
     },
     resistances:{
-        type: Map,
-        of: Number
+        type: Array
     },
     immunities:{
         type: Array
+    },
+    image:{
+        type: String
     }
     
 })

@@ -12,7 +12,7 @@ class SceneRepository {
 
     async getScene(scene_id){
       try { return await Scene.findById(scene_id) }
-      catch (error) { return 403 }
+      catch (error) { return 404 }
     }
 
     async uploadImage(scene_id, image_name){

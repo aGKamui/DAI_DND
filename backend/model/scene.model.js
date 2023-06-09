@@ -12,6 +12,9 @@ const SceneSchema = new Schema({
     },
     image:{
         type: String
+    },
+    tokens:{
+        type: Array
     }
 })
 
