@@ -4,8 +4,15 @@ import { useState } from "react";
 
 
 
-export const Grid = ({ count }) => {
-   
+export const Grid = (props) => {
+  
+  let backgroundURL = props.backgroundURL;
+  
+  const containerStyle = {
+    backgroundImage: `url(${backgroundURL})`,
+    width: 1224,
+    height: 714
+  };
   
 
   const numbers = [];
@@ -14,7 +21,7 @@ export const Grid = ({ count }) => {
   
 
 
-    for (let i = 1; i <= count; i++) {
+    for (let i = 1; i <= props.count; i++) {
       numbers.push(<div className="grid-item"></div>);
     };
     
@@ -25,13 +32,10 @@ export const Grid = ({ count }) => {
 
     return (
 
-
+      
       <div 
         className="grid-container"
-        style={{
-          width: 1224,
-          height: 714,
-      }}>
+        style={containerStyle}>
         
         {numbers}
         

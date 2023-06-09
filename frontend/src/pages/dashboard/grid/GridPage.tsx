@@ -70,7 +70,8 @@ Tool Bar
       }}>
 
 
-      <Grid count= {336}>
+      <Grid count= {336}
+      backgroundURL="https://cdn.discordapp.com/attachments/912106609235357756/1115607247440060457/TC_Bandit_Hideout_01_Caverns_Free_34x22.jpg">
       </Grid>
 
       
