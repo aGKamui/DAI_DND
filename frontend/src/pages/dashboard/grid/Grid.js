@@ -1,18 +1,16 @@
 import React from "react";
 import PopupRight from "./popup-right.js";
+import { useState } from "react";
 
 
 
-const Grid = ({ count }) => {
-    const numbers = [];
-    let tokens = [ <PopupRight id ="1" /> , <PopupRight id ="2"/>, <PopupRight id ="3"/>, <PopupRight id ="4"/>, <PopupRight id ="5"/>, <PopupRight id ="6"/>];
-
+export const Grid = ({ count }) => {
    
-    const removeToken = (id,tokens) => {
-      console.log(id)
-      //tokens = tokens.filter(item => item.id !== id);
-      
-    };
+  
+
+  const numbers = [];
+    
+   
   
 
 
@@ -36,7 +34,7 @@ const Grid = ({ count }) => {
       }}>
         
         {numbers}
-        {tokens}
+        
         
 
       </div>

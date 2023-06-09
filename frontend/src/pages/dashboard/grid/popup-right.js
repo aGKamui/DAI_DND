@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import './Popup.css';
 import './Grid.css';
 import Draggable from "react-draggable";
-import removeToken from "./Grid.js"
+
 import Grid from "./Grid.js"
+
 
 const PopupRight = ({id}) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,10 +22,21 @@ const PopupRight = ({id}) => {
   const handleStop = (e, data) => {
     console.log(e, data);
   };
- 
+  
+/* {isOpen && (
+        <div className="popup-overlay-right">
+         
+          <div className="popup-content-right">
+            <h2>Eliminar Token ?</h2>
+            <button  >Sim</button>
+            <button onClick={togglePopup}>Close</button>
+          </div>
+        </div>
+      )}
+    </div> */
 
   return (
-    <div>
+    
       <Draggable
         axis="both"
         handle=".handle"
@@ -44,18 +56,9 @@ const PopupRight = ({id}) => {
             height: 50,
           }}/>  
       </Draggable>
-          {id}
-      {isOpen && (
-        <div className="popup-overlay-right">
-         
-          <div className="popup-content-right">
-            <h2>Eliminar Token ?</h2>
-            <button onClick={()=>removeToken(id)} >Sim</button>
-            <button onClick={togglePopup}>Close</button>
-          </div>
-        </div>
-      )}
-    </div>
+        
+
+      
   );
 };
 
