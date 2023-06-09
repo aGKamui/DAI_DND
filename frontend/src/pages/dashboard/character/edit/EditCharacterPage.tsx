@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import "./EditCharacterPage.css";
 import { useParams } from "react-router-dom";
 import Sidebar from '../../../../components/common/Sidebar.tsx';
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, CssBaseline, Grid, Tab, Tabs, TextField, Typography, createTheme } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, CssBaseline, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Typography, createTheme } from '@mui/material';
 
 import testimage from '../../../../assets/images/nathan-poole-asset.jpg';
 import strength from '../../../../assets/images/strength.png';
@@ -26,6 +26,8 @@ function CharacterPage() {
   const [amountDamage, setAmountDamage] = useState(0);
   const [selectedTab, setSelectedTab] = useState(0);
 
+  const [classData, setClassData] = useState([]);
+
   const [str, setStr] = useState(0);
   const [dex, setDex] = useState(0);
   const [con, setCon] = useState(0);
@@ -33,6 +35,11 @@ function CharacterPage() {
   const [wis, setWis] = useState(0);
   const [cha, setCha] = useState(0);
 
+  const [selectedClass, setSelectedClass] = useState('');
+
+  const handleClassChange = (event: SelectChangeEvent) => {
+    setSelectedClass(event.target.value as string);
+  };
 
   let url = window.location.href;
 
@@ -146,6 +153,28 @@ function CharacterPage() {
     }
   }
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, [classData]);
+  async function getClassInfoAPI() {
+
+
+
+    try {
+      setIsLoading(true);
+      const response = await fetch('https://www.dnd5eapi.co/api/classes', {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      setClassData(jsonData["results"]);
+
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
   if (isLoading) {
     return (
       <><DoubleBubble center={true} width={"300px"} height={"300px"} /><p style={{ fontSize: '40px', textAlign: "center", alignItems: "center", alignContent: "center", paddingTop: 250, paddingLeft: 220 }}>Loading...</p></>
@@ -165,12 +194,16 @@ function CharacterPage() {
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
+
+    if (newValue === 2) {
+      getClassInfoAPI();
+    }
+
   };
 
 
   return (
     <><Sidebar />
-
       <div className="Body">
         <Typography
           component="h1"
@@ -182,8 +215,8 @@ function CharacterPage() {
         >
           A editar a personagem "{charData.information.name}"
         </Typography>
-        <div id="xd">  
-        <Tabs value={selectedTab} onChange={handleTabChange} centered>
+        <div id="xd">
+          <Tabs value={selectedTab} onChange={handleTabChange} centered>
             <Tab label="Visão Geral" />
             <Tab label="Equipamento" />
             <Tab label="Classe" />
@@ -191,10 +224,15 @@ function CharacterPage() {
             <Tab label="Habilidades" />
           </Tabs>
         </div>
-          {selectedTab === 0 &&
-        <Grid container spacing={2} padding={2} paddingTop={2} alignItems="center" justifyContent="center">
-        
-         
+
+
+
+
+
+        {selectedTab === 0 &&
+          <Grid container spacing={2} padding={2} paddingTop={2} alignItems="center" justifyContent="center">
+
+
             <Grid item>
               <Card sx={{ maxWidth: 900, minHeight: 500 }}>
                 <CardMedia
@@ -431,11 +469,52 @@ function CharacterPage() {
                 </Button>
               </Card>
             </Grid>
-          
-        </Grid>}
+
+          </Grid>
+        }
+
+        {selectedTab === 2 &&
+          <Grid container spacing={2} padding={2} paddingTop={2} alignItems="center" justifyContent="center">
+            <Grid item>
+              <Card sx={{ maxWidth: 900, minHeight: 500 }}>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={testimage}
+                />
+                <CardContent style={{ width: 892 }}>
+                  <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
+                    Classe
+                  </Typography>
+
+                 
+
+
+                </CardContent>
+
+                <Grid container spacing={5} padding={2} paddingTop={2} direction="row" alignItems="center" justifyContent="center">
+                  <Grid item>
+                  </Grid>
+                </Grid>
+              </Card>
+            </Grid>
+          </Grid>
+        }
+
+
+
+
+
+
+
+
+
+
+
       </div>
     </>
   );
 }
+
 
 export default CharacterPage;
