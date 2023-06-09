@@ -11,7 +11,7 @@ const DefaultPage = (props: Props) => {
         fetch('http://localhost:8000/api/character/', {
             method: "GET",
             headers: {
-                'authorization': Cookies.get("Token"),
+                'auth': Cookies.get("Token"),
                 'Accept' : 'application/json',
                 'Content-Type': 'application/json'
             }

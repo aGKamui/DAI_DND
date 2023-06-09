@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./EditCharacterPage.css";
 import { useParams } from "react-router-dom";
 import Sidebar from '../../../../components/common/Sidebar.tsx';
@@ -13,21 +13,71 @@ import proficiency from '../../../../assets/images/proficiency.png';
 import speed from '../../../../assets/images/speed.png';
 import wisdom from '../../../../assets/images/wisdom.png';
 import constitution from '../../../../assets/images/constitution.png';
+import Cookies from 'js-cookie';
+import { DoubleBubble }
+  from 'react-spinner-animated';
+
+import 'react-spinner-animated/dist/index.css'
 
 function CharacterPage() {
-  const params = useParams();
+  const [charData, setCharData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  let url = window.location.href;
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    let url_string = url.split('/');
+    url = url_string[url_string.length - 1]; //parse char id
+    try {
+      const response = await fetch('http://localhost:8000/api/character/' + url, {
+        method: "GET",
+        headers: {
+          'auth': Cookies.get("Token"),
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      const jsonData = await response.json();
+      setCharData(jsonData);
+      console.log(jsonData)
+      setIsLoading(false);
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
   const typographyStyle = {
     fontFamily: 'Josefin Sans',
     fontSize: '18px',
+    paddingTop: '10px'
   };
   const typographyStyleBold = {
     fontFamily: 'Josefin Sans',
     fontSize: '25px',
     fontWeight: 'bold',
+    paddingTop: '10px'
   };
-  const sendToEdit = () => {
-    window.location.href = '/dashboard/newCharacter/teste';
-  };
+
+  if (isLoading) {
+    return (
+      <><DoubleBubble center={true} width={"300px"} height={"300px"} /><p style={{ fontSize: '40px', textAlign: "center", alignItems: "center", alignContent: "center", paddingTop: 250, paddingLeft: 220 }}>Loading...</p></>
+    )
+
+  }
+
+  function handleChange(event): void {
+    console.log(event.target.id);   
+    console.log("a change");
+    console.log(event.target.value);  
+    console.log(charData.information.name)
+    console.log(event.target.value == charData.information.name)
+    updateCharacterInfo(charData,event.target.id);   
+
+  }
 
   return (
     <><Sidebar />
@@ -40,7 +90,7 @@ function CharacterPage() {
           gutterBottom
           fontFamily="Josefin Sans"
         >
-          A editar a personagem "Teste Nome 1"
+          A editar a personagem "{charData.information.name}"
         </Typography>
         <Grid container spacing={2} padding={2} paddingTop={2} alignItems="center" justifyContent="center">
           <Grid item>
@@ -52,12 +102,23 @@ function CharacterPage() {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
-                  Teste Nome 1
+                  Nome da Personagem
                 </Typography>
-                <Typography variant="body2" color="text.secondary" style={typographyStyle}>
-                  Bio:
-                  Venho por este meio escrever esta bio deste character para dizer que sou omegasexy e vou dar roll 20 7.4x seguidas
-                </Typography>
+                <TextField
+                  id="information/name"
+                  variant="outlined"
+                  defaultValue={charData.information.name}                   
+                  onBlur={handleChange}/>
+                <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
+                  Bio</Typography>
+                <TextField 
+                  id="character_bio"
+                  multiline
+                  fullWidth 
+                  rows={4}
+                  defaultValue={charData.information.bio}
+                  variant="filled"
+                />
               </CardContent>
 
               <Grid container spacing={5} padding={2} paddingTop={2} direction="row" alignItems="center" justifyContent="center">
@@ -133,34 +194,34 @@ function CharacterPage() {
                     <div >0</div>
                   </Box>
                 </Grid>
-                </Grid>
-                <Grid container spacing={15}  direction="row" alignItems="center" justifyContent='center'>
-                  <Grid item>
-                    <Box sx={{ color: 'text.primary', fontSize: 22, width: 110 }}>
-                      Health
-                      <div>25 / 100 </div>
-                      
-                      <Grid container spacing={15} alignItems="center" justifyContent='center'>
-                        <Grid item>
-                          <CardMedia sx={{ maxWidth: 64, margin: 'auto' }}
-                            component="img"
+              </Grid>
+              <Grid container spacing={15} direction="row" alignItems="center" justifyContent='center'>
+                <Grid item>
+                  <Box sx={{ color: 'text.primary', fontSize: 22, width: 110 }}>
+                    Health
+                    <div>25 / 100 </div>
 
-                            image={hp}
-                          />
-                          
-                          <div className='buttoncontainer'><Button variant="contained" color="success">  Heal  </Button> 
-                          <TextField sx={{width:60}} hiddenLabel id="filled-hidden-label-small" defaultValue="0" variant="filled" size="small" />
-                           <Button variant="contained" color="error">Damage</Button></div>
-                          
-                          
-                        </Grid>
+                    <Grid container spacing={15} alignItems="center" justifyContent='center'>
+                      <Grid item>
+                        <CardMedia sx={{ maxWidth: 64, margin: 'auto' }}
+                          component="img"
+
+                          image={hp}
+                        />
+
+                        <div className='buttoncontainer'><Button variant="contained" color="success">  Heal  </Button>
+                          <TextField sx={{ width: 60 }} hiddenLabel id="filled-hidden-label-small" defaultValue="0" variant="filled" size="small" />
+                          <Button variant="contained" color="error">Damage</Button></div>
+
+
                       </Grid>
+                    </Grid>
 
 
-                    </Box>
-                  </Grid>
+                  </Box>
                 </Grid>
-              
+              </Grid>
+
               <Grid container spacing={15} paddingTop={5} direction="row" alignItems="center" justifyContent='center'>
                 <Grid item>
                   <Box sx={{ color: 'text.primary', fontSize: 22, width: 110 }}>
@@ -188,26 +249,46 @@ function CharacterPage() {
                     <div >30ft</div>
                     Speed
                   </Box>
-                  
+
                 </Grid>
-                
-                
+
+
               </Grid>
-              
+
               <Button
-              type="submit"
-              
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Atualizar Informações de Personagem
-            </Button>
+                type="submit"
+
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Atualizar Informações de Personagem
+              </Button>
             </Card>
           </Grid>
         </Grid>
-      </div>      
+      </div>
     </>
   );
+}
+
+
+async function updateCharacterInfo(charData,typeOfInfo) {
+  
+  try {
+    const response = await fetch('http://localhost:8000/api/character/' + charData._id +"/" + typeOfInfo, {
+      method: "GET",
+      headers: {
+        'auth': Cookies.get("Token"),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    const jsonData = await response;
+    console.log(jsonData);
+
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
 }
 
 export default CharacterPage;

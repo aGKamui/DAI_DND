@@ -69,7 +69,7 @@ const appRoutes: RouteType[] = [
                 }
             },
             {
-                path: "dashboard/myCharacters",
+                path: "/dashboard/myCharacters",
                 element: <MyCharacterPage/>,
                 state: "dashboard.Mycharacterpage",
                 sidebarProps: {
