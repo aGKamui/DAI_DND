@@ -76,7 +76,7 @@ const NewCampaignPage = (props: Props) => {
                                         {item.title}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary" style={typographyStyle}>
-                                        {item.system}
+                                        {item.bio}
                                     </Typography>
                                 </CardContent>
 

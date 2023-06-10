@@ -10,6 +10,7 @@ import MyCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.t
 import MyCampaignPage from "../pages/dashboard/campaigns/MyCampaignPage.tsx";
 import Perfil from "../pages/dashboard/perfil/Perfil.tsx";
 import NewCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.tsx";
+import NewCampaignPage from "../pages/dashboard/campaigns/MyCampaignPage.tsx";
 
 
 const appRoutes: RouteType[] = [
@@ -39,9 +40,9 @@ const appRoutes: RouteType[] = [
                 }
             },
             {
-                path: "/dashboard/testepage",
+                path: "/dashboard/newCampaign",
                 element: <DefaultPage/>,
-                state: "dashboard.testepage",
+                state: "dashboard.newCampaign",
                 sidebarProps: {
                     displayText: "Criar Campanha"
                 }
