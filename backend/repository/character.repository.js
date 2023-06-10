@@ -84,6 +84,14 @@ class CharacterRepository {
     let result = await character.save();
     return result;
   }
+
+  async exists(character_id){
+    try{
+      return await Character.findOne({_id: character_id})
+    }catch{
+      return 404
+    }
+  }
 }
 
 

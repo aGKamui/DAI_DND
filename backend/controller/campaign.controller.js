@@ -9,6 +9,14 @@ class CampaignController {
     async getCampaign(campaignId, username) {
         return await campaignService.getCampaign(campaignId, username);
     }
+
+    async updateCampaign(campaignId, username, toChange){
+        return await campaignService.updateCampaign(campaignId, username, toChange);
+    }
+
+    async getCampaigns(username){
+        return await campaignService.getCampaigns(username);
+    }
 }
 
 
