@@ -9,6 +9,7 @@ import Pricing from "../pages/dashboard/pricing/Pricing.js";
 import MyCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.tsx";
 import MyCampaignPage from "../pages/dashboard/campaigns/MyCampaignPage.tsx";
 import Perfil from "../pages/dashboard/perfil/Perfil.tsx";
+import NewCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.tsx";
 
 
 const appRoutes: RouteType[] = [
@@ -61,9 +62,9 @@ const appRoutes: RouteType[] = [
                 state: "dashboard.index"
             },
             {
-                path: "/dashboard/testepage",
-                element: <DefaultPage/>,
-                state: "dashboard.testepage",
+                path: "/dashboard/newCharacter",
+                element: <NewCharacterPage/>,
+                state: "dashboard.newCharacter",
                 sidebarProps: {
                     displayText: "Criar nova personagem"
                 }

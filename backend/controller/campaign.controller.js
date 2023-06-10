@@ -17,6 +17,14 @@ class CampaignController {
     async getCampaigns(username){
         return await campaignService.getCampaigns(username);
     }
+
+    async uploadImage(campaign_id, image_name){
+        return await campaignService.uploadImage(campaign_id, image_name);
+    }
+
+    async deleteCampaign(campaignId, username){
+        return await campaignService.deleteCampaign(campaignId, username);
+    }
 }
 
 
