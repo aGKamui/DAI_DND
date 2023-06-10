@@ -50,9 +50,14 @@ function CharacterPage() {
   const [amountDamage, setAmountDamage] = useState(0);
   const [selectedTab, setSelectedTab] = useState(0);
   const [classData, setClassData] = useState([]);
+  const [equipmentData, setEquipmentData] = useState([]);
+  const [skillData, setSkillData] = useState([]);
   const [classSubData, setClassSubData] = useState([]);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const [tooltipContent, setTooltipContent] = useState('Loading...');
+  const [equipmentTooltipContent, setEquipmentTooltipContent] = useState('Loading...');
+
+  const [skillTooltipContent, setSkillTooltipContent] = useState('Loading...');
 
 
   const [str, setStr] = useState(0);
@@ -79,15 +84,11 @@ function CharacterPage() {
 
 
   const [selectedClass, setSelectedClass] = useState('');
+  const [selectedEquipment, setSelectedEquipment] = useState('');
+  const [selectedSkill, setSelectedSkill] = useState('');
 
-  const handleUncheckAll = () => {
-    try {
+  let url = window.location.href;
 
-    } catch (error) {
-      
-    }
-    
-  };
 
 
   const handleClassChange = (event: SelectChangeEvent) => {
@@ -96,7 +97,15 @@ function CharacterPage() {
     getClassSubInfoAPI(event.target.value)
   };
 
-  let url = window.location.href;
+  const handleEquipmentAdd = (event: SelectChangeEvent) => {
+    setSelectedEquipment(event.target.value as string);
+  };
+
+  const handleSkillAdd = (event: SelectChangeEvent) => {
+    setSelectedSkill(event.target.value as string);
+  };
+
+
 
   useEffect(() => {
     fetchData();
@@ -105,7 +114,6 @@ function CharacterPage() {
   useEffect(() => {
     if (selectedTab === 2) {
       setIsLoading(false)
-      console.log(classData)
     }
   }, [classData]);
 
@@ -120,6 +128,64 @@ function CharacterPage() {
       setTooltipContent("Loading...")
     }
   }, [tooltipContent]);
+
+  useEffect(() => {
+    if (selectedTab === 1) {
+      setIsLoading(false)
+    }
+  }, [equipmentData]);
+
+
+  useEffect(() => {
+    if (selectedTab === 4) {
+      setIsLoading(false)
+    }
+  }, [skillData]);
+
+  useEffect(() => {
+    if (selectedTab === 4) {
+      setIsLoading(false)
+    }
+  }, [charData]);
+
+
+  useEffect(() => {
+    if (selectedTab === 1 && equipmentTooltipContent === "Loading...") {
+      setEquipmentTooltipContent("Loading...")
+    }
+  }, [equipmentTooltipContent]);
+
+
+  async function getSkillAPI() {
+    try {
+      setIsLoading(true);
+      const response = await fetch('https://www.dnd5eapi.co/api/skills', {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      setSkillData(jsonData["results"]);
+
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
+  async function getEquipmentInfoAPI() {
+    try {
+      setIsLoading(true);
+      const response = await fetch('https://www.dnd5eapi.co/api/equipment', {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      setEquipmentData(jsonData["results"]);
+
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
 
   async function getClassInfoAPI() {
     try {
@@ -150,6 +216,7 @@ function CharacterPage() {
       console.error('Error fetching data:', error);
     }
   }
+
 
 
   async function fetchData() {
@@ -224,6 +291,63 @@ function CharacterPage() {
   };
 
 
+  async function updateCharacterInventory(charData) {
+    let myEquips = charData.inventory;
+    myEquips = [...charData.inventory, selectedEquipment];
+    try {
+      const response = await fetch('http://localhost:8000/api/character/' + charData._id + "", {
+        method: "PUT",
+        headers: {
+          'auth': Cookies.get("Token"),
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          {
+            "inventory": myEquips
+          }
+        ),
+
+      })
+      const jsonData = response;
+      console.log(jsonData);
+      charData.inventory = [...charData.inventory, selectedEquipment];
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  async function updateCharacterSkill(charData) {
+    let mySkills = charData.spells;
+    if (!mySkills.includes(selectedSkill)) {
+      console.log(charData.spells.includes(selectedSkill))
+      mySkills = [...charData.spells, selectedSkill];
+
+      try {
+        const response = await fetch('http://localhost:8000/api/character/' + charData._id + "", {
+          method: "PUT",
+          headers: {
+            'auth': Cookies.get("Token"),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+              "spells": mySkills
+            }
+          ),
+
+        })
+        const jsonData = response;
+        charData.spells = [...charData.spells, selectedSkill];
+
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+  }
 
   async function updateCharacterInfo(charData) {
     try {
@@ -260,11 +384,43 @@ function CharacterPage() {
 
   async function getProficiencyInfoAPI(apiURL) {
     try {
-      const response = await fetch('https://www.dnd5eapi.co/api' + apiURL.replace('Skill: ', '/skills/').replace(' ', '-').toLowerCase(), {
+      const response = await fetch('https://www.dnd5eapi.co/api' + apiURL.replaceAll('Skill: ', '/skills/').replaceAll(' ', '-').toLowerCase(), {
         method: "GET"
       })
       const jsonData = await response.json();
       setTooltipContent(jsonData.desc)
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
+  async function getSkillTooltipInfoAPI(apiURL) {
+    try {
+      const response = await fetch('https://www.dnd5eapi.co/api/skills/' + apiURL.replaceAll('(', '').replaceAll(' ', '-').replaceAll(')', '').replaceAll(',', '').replaceAll('\'', '').toLowerCase(), {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      setSkillTooltipContent(jsonData.desc)
+
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  async function getEquipmentTooltipInfoAPI(apiURL) {
+    try {
+      const response = await fetch('https://www.dnd5eapi.co/api/equipment/' + apiURL.replaceAll('(', '').replaceAll(':', '').replaceAll(' ', '-').replaceAll(')', '').replaceAll(',', '').replaceAll('\'', '').toLowerCase(), {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      if (Object.keys(jsonData.desc).length === 0) {
+        setEquipmentTooltipContent("This item has no description.")
+      } else {
+        setEquipmentTooltipContent(jsonData.desc)
+      }
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -289,7 +445,6 @@ function CharacterPage() {
     charData.information.bio = value;
   }
 
-  let tooltip_temp = "";
   const getProficiencyTooltip = (apiURL) => {
     setTooltipContent("Loading...")
     setTimeout(() => {
@@ -298,12 +453,33 @@ function CharacterPage() {
 
   };
 
+  const getEquipmentTooltip = (apiURL) => {
+    setTooltipContent("Loading...")
+    setTimeout(() => {
+      getEquipmentTooltipInfoAPI(apiURL.target.outerText);
+    }, 225);
+
+  };
+
+  const getSkillTooltip = (apiURL) => {
+    setSkillTooltipContent("Loading...")
+    setTimeout(() => {
+      getSkillTooltipInfoAPI(apiURL.target.outerText);
+    }, 225);
+
+  };
+
+
+
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
-
-    if (newValue === 2) {
+    if (newValue === 1) {
+      getEquipmentInfoAPI();
+    } else if (newValue === 2) {
       getClassInfoAPI();
+    } else if (newValue === 4) {
+      getSkillAPI();
     }
 
   };
@@ -314,12 +490,12 @@ function CharacterPage() {
     const checkboxValue = event.target.value;
     const isChecked = event.target.checked;
     let proficiencyCap = 2;
-    if (sel_class === "Rogue"){
+    if (sel_class === "Rogue") {
       proficiencyCap = 4;
-    }else if(sel_class === "Bard" || sel_class === "Ranger"){
+    } else if (sel_class === "Bard" || sel_class === "Ranger") {
       proficiencyCap = 3;
     }
-    
+
     if (isChecked) {
       if (selectedCheckboxes.length < proficiencyCap) {
         setSelectedCheckboxes([...selectedCheckboxes, checkboxValue]);
@@ -602,7 +778,79 @@ function CharacterPage() {
 
           </Grid>
         }
+        {selectedTab === 1 &&
 
+          <Grid container spacing={2} padding={2} paddingTop={2} alignItems="center" justifyContent="center">
+            <Grid item>
+              <Card sx={{ maxWidth: 900, minHeight: 500 }}>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={testimage}
+                />
+                <CardContent style={{ width: 892, justifyContent: "flex-start", justifyContent: "flex-start", alignItems: "stretch", flexDirection: "column", alignContent: "center", flexWrap: "wrap" }}>
+                  <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
+                    Equipamento (Atualmente Equipado)
+                  </Typography>
+                  <Box sx={{ minWidth: 120, display: "flex", flexDirection: "row", flexWrap: "wrap", alignContent: "center", justifyContent: "center", alignItems: "center" }}>
+                    {charData.equipment.map((item, index) => (
+                      <Grid item key={index}>
+                        <Tooltip title={equipmentTooltipContent} arrow onMouseEnter={getEquipmentTooltip}>
+                          <p style={{ fontSize: 18, paddingRight: 25 }}>{item}</p>
+                        </Tooltip>
+                      </Grid>
+                    ))}
+                  </Box>
+                  <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
+                    Inventário
+                  </Typography>
+                  <Box sx={{ minWidth: 120, display: "flex", flexDirection: "row", flexWrap: "wrap", alignContent: "center", justifyContent: "center", alignItems: "center" }}>
+                    {charData.inventory.map((item, index) => (
+                      <Grid item key={index}>
+                        <Tooltip title={equipmentTooltipContent} arrow onMouseEnter={getEquipmentTooltip}>
+                          <p style={{ fontSize: 18, paddingRight: 25 }}>{item}</p>
+                        </Tooltip>
+
+                      </Grid>
+                    ))}
+                  </Box>
+                  <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
+                    Adicionar Item ao Inventário
+                  </Typography>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Escolha um equipamento para adicionar</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={selectedEquipment}
+                      label="Escolha um equipamento para adicionar"
+                      onChange={handleEquipmentAdd}
+                    >
+                      {equipmentData.map((item, index) => (
+                        <MenuItem key={index} value={item.name}>{item.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {selectedEquipment !== "" &&
+                    <><Button
+                      type="submit"
+                      onClick={() => updateCharacterInventory(charData)}
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                    >
+                      Adicionar ao Inventário da Personagem
+                    </Button></>
+                  }
+
+
+
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+        }
         {selectedTab === 2 &&
           <Grid container spacing={2} padding={2} paddingTop={2} alignItems="center" justifyContent="center">
             <Grid item>
@@ -637,7 +885,7 @@ function CharacterPage() {
                     <p style={{ paddingTop: 10 }}>{classSubData.proficiency_choices[0].desc}</p>
                     <p>{classSubData.name} </p><img src={classImages[classSubData.name]} style={{ maxWidth: '100%', maxHeight: '100%' }} alt={classSubData.name} />
 
-                  
+
 
                     <FormGroup style={{ display: 'flex', flexDirection: "row" }}>
                       {classSubData.proficiency_choices[0].from.options.map((item, index) => (
@@ -667,16 +915,80 @@ function CharacterPage() {
                   </>
                   }
 
-
                 </CardContent>
-
-                <Grid container spacing={5} padding={2} paddingTop={2} direction="row" alignItems="center" justifyContent="center">
-                  <Grid item>
-                  </Grid>
-                </Grid>
               </Card>
             </Grid>
           </Grid>
+        }
+        {selectedTab === 4 &&
+
+          <Grid container spacing={2} padding={2} paddingTop={2} alignItems="center" justifyContent="center">
+            <Grid item>
+              <Card sx={{ maxWidth: 900, minHeight: 500 }}>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={testimage}
+                />
+                <CardContent style={{ width: 892, justifyContent: "flex-start", justifyContent: "flex-start", alignItems: "stretch", flexDirection: "column", alignContent: "center", flexWrap: "wrap" }}>
+                  <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
+                    Habilidades
+                  </Typography>
+                  <Box sx={{ minWidth: 120, display: "flex", flexDirection: "row", flexWrap: "wrap", alignContent: "center", justifyContent: "center", alignItems: "center" }}>
+                    {charData.spells.map((item, index) => (
+                      <Grid item key={index}>
+                        <Tooltip title={skillTooltipContent} arrow onMouseEnter={getSkillTooltip}>
+                          <p style={{ fontSize: 18, paddingRight: 25 }}>{item}</p>
+                        </Tooltip>
+                      </Grid>
+                    ))}
+                  </Box>
+                  <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
+                    Adicionar Habilidade
+                  </Typography>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Escolha uma habilidade para adicionar</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={selectedSkill}
+                      label="Escolha um equipamento para adicionar"
+                      onChange={handleSkillAdd}
+                    >
+                      {skillData.map((item, index) => (
+                        <MenuItem key={index} value={item.name}>{item.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {selectedSkill !== "" &&
+                    <><Button
+                      type="submit"
+                      onClick={() => updateCharacterSkill(charData)}
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                    >
+                      Adicionar Habilidade à Personagem
+                    </Button></>
+                  }
+
+                  <Box sx={{ minWidth: 120, display: "flex", flexDirection: "row", flexWrap: "wrap", alignContent: "center", justifyContent: "center", alignItems: "center" }}>
+                    {charData.spells.map((item, index) => (
+                      <Grid item key={index}>
+                        <Tooltip title={skillTooltipContent} arrow onMouseEnter={getSkillTooltip}>
+                          <p style={{ fontSize: 18, paddingRight: 25 }}>{item}</p>
+                        </Tooltip>
+                      </Grid>
+                    ))}
+                  </Box>
+
+
+
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
         }
 
 
