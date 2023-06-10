@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import "./EditCharacterPage.css";
-import { useParams } from "react-router-dom";
+import { json, useParams } from "react-router-dom";
 import Sidebar from '../../../../components/common/Sidebar.tsx';
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, CssBaseline, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Typography, createTheme } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Checkbox, Container, CssBaseline, FormControl, FormControlLabel, FormGroup, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Tooltip, Typography, createTheme } from '@mui/material';
 
 import testimage from '../../../../assets/images/nathan-poole-asset.jpg';
 import strength from '../../../../assets/images/strength.png';
@@ -20,13 +20,40 @@ import { DoubleBubble }
 
 import 'react-spinner-animated/dist/index.css'
 
+interface CharData {
+  abilityscores: {
+    str: number;
+    dex: number;
+    con: number;
+    wis: number;
+    cha: number;
+    int: number;
+  };
+}
+
+
 function CharacterPage() {
-  const [charData, setCharData] = useState({});
+
+  const [charData, setCharData] = useState<CharData>({
+    "abilityscores": {
+      "str": 0,
+      "dex": 0,
+      "con": 0,
+      "wis": 0,
+      "cha": 0,
+      "int": 0,
+    }
+  });
+
+  const isInitialRender = useRef(true);
   const [isLoading, setIsLoading] = useState(true);
   const [amountDamage, setAmountDamage] = useState(0);
   const [selectedTab, setSelectedTab] = useState(0);
-
   const [classData, setClassData] = useState([]);
+  const [classSubData, setClassSubData] = useState([]);
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+  const [tooltipContent, setTooltipContent] = useState('Loading...');
+
 
   const [str, setStr] = useState(0);
   const [dex, setDex] = useState(0);
@@ -35,10 +62,27 @@ function CharacterPage() {
   const [wis, setWis] = useState(0);
   const [cha, setCha] = useState(0);
 
+  const classImages = {
+    "Barbarian": "https://www.dndbeyond.com/avatars/thumbnails/6/342/420/618/636272680339895080.png",
+    "Bard": "https://www.dndbeyond.com/avatars/thumbnails/6/369/420/618/636272705936709430.png",
+    "Cleric": "https://www.dndbeyond.com/avatars/thumbnails/6/371/420/618/636272706155064423.png",
+    "Druid": "https://www.dndbeyond.com/avatars/thumbnails/6/346/420/618/636272691461725405.png",
+    "Fighter": "https://www.dndbeyond.com/avatars/thumbnails/6/359/420/618/636272697874197438.png",
+    "Monk": "https://www.dndbeyond.com/avatars/thumbnails/6/342/420/618/636272680339895080.png",
+    "Paladin": "https://www.dndbeyond.com/avatars/thumbnails/6/365/420/618/636272701937419552.png",
+    "Ranger": "https://www.dndbeyond.com/avatars/thumbnails/6/367/420/618/636272702826438096.png",
+    "Rogue": "https://www.dndbeyond.com/avatars/thumbnails/6/384/420/618/636272820319276620.png",
+    "Sorcerer": "https://www.dndbeyond.com/avatars/thumbnails/6/485/420/618/636274643818663058.png",
+    "Warlock": "https://www.dndbeyond.com/avatars/thumbnails/6/375/420/618/636272708661726603.png",
+    "Wizard": "https://www.dndbeyond.com/avatars/thumbnails/6/357/420/618/636272696881281556.png"
+  }
+
+
   const [selectedClass, setSelectedClass] = useState('');
 
   const handleClassChange = (event: SelectChangeEvent) => {
     setSelectedClass(event.target.value as string);
+    getClassSubInfoAPI(event.target.value)
   };
 
   let url = window.location.href;
@@ -46,6 +90,50 @@ function CharacterPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (selectedTab === 2) {
+      setIsLoading(false)
+      console.log(classData)
+    }
+  }, [classData]);
+
+  useEffect(() => {
+    if (selectedTab === 2) {
+      setIsLoading(false)
+    }
+  }, [classSubData]);
+
+  async function getClassInfoAPI() {
+    try {
+      setIsLoading(true);
+      const response = await fetch('https://www.dnd5eapi.co/api/classes', {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      setClassData(jsonData["results"]);
+
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  async function getClassSubInfoAPI(chosenClass) {
+    try {
+      setIsLoading(true);
+      const response = await fetch('https://www.dnd5eapi.co/api/classes/' + chosenClass.toLowerCase(), {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      setClassSubData(jsonData);
+
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
 
   async function fetchData() {
     let url_string = url.split('/');
@@ -145,7 +233,7 @@ function CharacterPage() {
         ),
 
       })
-      const jsonData = await response;
+      const jsonData = response;
       console.log(jsonData);
 
     } catch (error) {
@@ -153,26 +241,20 @@ function CharacterPage() {
     }
   }
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [classData]);
-  async function getClassInfoAPI() {
-
-
-
+  async function getProficiencyInfoAPI(apiURL) {
     try {
-      setIsLoading(true);
-      const response = await fetch('https://www.dnd5eapi.co/api/classes', {
+      const response = await fetch('https://www.dnd5eapi.co/api/' + apiURL.replace('Skill: ', '/skills/').toLowerCase(), {
         method: "GET"
       })
       const jsonData = await response.json();
-      setClassData(jsonData["results"]);
-
+      setTooltipContent(jsonData.desc)
 
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   }
+
+
 
 
   if (isLoading) {
@@ -190,6 +272,10 @@ function CharacterPage() {
     charData.information.bio = value;
   }
 
+  let tooltip_temp = "";
+  const getProficiencyTooltip = (apiURL) => {    
+    getProficiencyInfoAPI(apiURL.target.outerText);
+  };
 
 
   const handleTabChange = (event, newValue) => {
@@ -200,6 +286,23 @@ function CharacterPage() {
     }
 
   };
+
+
+
+  const handleChange = (event) => {
+    const checkboxValue = event.target.value;
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      if (selectedCheckboxes.length < 2) {
+        setSelectedCheckboxes([...selectedCheckboxes, checkboxValue]);
+      }
+    } else {
+      setSelectedCheckboxes(selectedCheckboxes.filter(item => item !== checkboxValue));
+    }
+  };
+
+
 
 
   return (
@@ -215,7 +318,7 @@ function CharacterPage() {
         >
           A editar a personagem "{charData.information.name}"
         </Typography>
-        <div id="xd">
+        <div>
           <Tabs value={selectedTab} onChange={handleTabChange} centered>
             <Tab label="Visão Geral" />
             <Tab label="Equipamento" />
@@ -482,12 +585,56 @@ function CharacterPage() {
                   height="300"
                   image={testimage}
                 />
-                <CardContent style={{ width: 892 }}>
+                <CardContent style={{ width: 892, justifyContent: "flex-start", justifyContent: "flex-start", alignItems: "stretch", flexDirection: "column", alignContent: "center", flexWrap: "wrap" }}>
                   <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
                     Classe
                   </Typography>
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">A minha classe</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={selectedClass}
+                        label="A minha classe"
+                        onChange={handleClassChange}
+                      >
+                        {classData.map((item, index) => (
+                          <MenuItem key={index} value={item.name}>{item.name}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
 
-                 
+                  {selectedClass !== "" && <>
+                    <p style={{ paddingTop: 10 }}>{classSubData.proficiency_choices[0].desc}</p>
+                    <p>{classSubData.name} </p><img src={classImages[classSubData.name]} style={{ maxWidth: '100%', maxHeight: '100%' }} alt={classSubData.name} />
+                    <FormGroup style={{ display: 'flex', flexDirection: "row" }}>
+                      {classSubData.proficiency_choices[0].from.options.map((item, index) => (
+                        <Grid item key={index}>
+                          <Tooltip title={tooltipContent} arrow onMouseEnter={getProficiencyTooltip}>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  value={`checkbox${index}`}
+                                  onChange={handleChange}
+                                  checked={selectedCheckboxes.includes(`checkbox${index}`)}
+                                />
+                              }
+                              label={item.item.name}
+                            />
+                          </Tooltip>
+                        </Grid>
+                      ))}
+                    </FormGroup>
+                    <p style={{ paddingTop: 10 }}>This class starts with:</p>
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                      {classSubData.proficiencies.map((item, index) => (
+                        <p style={{ paddingTop: 10, fontSize: 15 }}>{item.name}  |  </p>
+                      ))}
+                    </Box>
+                  </>
+                  }
 
 
                 </CardContent>
@@ -511,7 +658,7 @@ function CharacterPage() {
 
 
 
-      </div>
+      </div >
     </>
   );
 }
