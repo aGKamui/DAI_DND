@@ -6,7 +6,6 @@ class AuthenticationService {
     let auth = await authenticationRepository.loginUser(user);
     if (auth !== 401) {
       let token = await this.generateAuthToken(auth);
-      console.log(user);
       auth = {username: auth[0],type: auth[1], token: token}
     }
     return auth;
@@ -18,15 +17,13 @@ class AuthenticationService {
 
 
   async generateAuthToken(username){
-    const token = jwt.sign({username}, 'qjF36qhSdXYYzfgnG9Z8sFSDaFYSPXym', { expiresIn: '7d' });
-    return token;
+    return jwt.sign({username}, process.env.JWT_SECRET_KEY, { expiresIn: '2h' });
   }
 
-  async verifyToken(token){
-    try {
-      const decoded = jwt.verify(token, 'qjF36qhSdXYYzfgnG9Z8sFSDaFYSPXym');
-      return decoded;
-    } catch (error) { return 401 }
+  async verifyToken(token){  
+    try {        
+      return jwt.verify(token, process.env.JWT_SECRET_KEY)      
+    } catch (error) { return 401}    
   }
 }
 

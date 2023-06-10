@@ -8,37 +8,52 @@ class CharacterRepository {
   }
 
   async getCharacter(username, character_id){
-    let character
-
     if (character_id != undefined){
-        try{ character = await Character.findById(character_id); }
-        catch(err){
-            console.log("Character not found, id:", character_id)
-            return 403
-        }
+      if(!(await this.userOwnsCharacter(username, character_id))){ return 403; }
+      return await Character.findById(character_id);
     }
 
     let char_list_ids = await this.getUserCharacters(username);
-    let char_list = [];
-    let userOwns = false;
-    if (char_list_ids.length > 0){
-        for (let i = 0; i < char_list_ids.length; i++){
-            let new_char = await Character.find({_id:char_list_ids[i]})
-            char_list.push(new_char[0]);
-            if (character_id != undefined) {
-                if (new_char[0]["_id"].toString() == character["_id"].toString()) {
-                    userOwns = true;
-                }
-            }
-        }
+    let char_list = []
+    for (let i = 0; i < char_list_ids.length; i++){
+      let char = await Character.findById(char_list_ids[i])
+      char_list.push(char);
     }
-    if (!userOwns && character_id != undefined){ return 403; }
-    else if (userOwns && character_id){ return character }
     return char_list;
   }
 
   async getUserCharacters(username){
-    return (await User.find({username:username}))[0]["characters"];
+    let user_object_ids = (await User.find({username:username}))[0]["characters"]
+    let user_ids = []
+    user_object_ids.forEach(user_object => {
+      user_ids.push(user_object.toString());
+    });
+    return user_ids;
+  }
+
+  async delCharacter(username, character_id){
+    if(!(await this.userOwnsCharacter(username, character_id))){ return 403; }
+
+    //deleting the character from the user character list
+    let user = (await User.find({username:username}))[0];
+    let user_characters = user["characters"]
+    user_characters = user_characters.filter(e => e.toString() !== character_id);
+    user["characters"] = user_characters;
+    user.save();
+
+    //deleting the character from the db
+    let character;
+    try{ character = await Character.findByIdAndDelete(character_id); }
+    catch(err){
+      console.log("Error deleting character, id: ", character_id)
+      return 403
+    }
+    return character;
+  }
+
+  async userOwnsCharacter(username, character_id){
+    let owned_characters_id = await this.getUserCharacters(username);
+    return owned_characters_id.includes(character_id);
   }
 
 
@@ -57,6 +72,26 @@ class CharacterRepository {
   }
 
 
+  async changeCharacter(username, changes, character_id){
+    let character;
+    try { character = await Character.findById(character_id); } 
+    catch (error) { console.log("Character not found, id:", character_id); }
+    if (character == undefined) { return 403 }
+    for (const type in changes) {
+      if (character[type] == undefined) { return 400 }
+      character[type] = changes[type]
+    }
+    let result = await character.save();
+    return result;
+  }
+
+  async exists(character_id){
+    try{
+      return await Character.findOne({_id: character_id})
+    }catch{
+      return 404
+    }
+  }
 }
 
 

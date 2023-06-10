@@ -3,15 +3,18 @@ const Schema = mongoose.Schema;
 
 const SceneSchema = new Schema({
     width: {
-        type: Integer,
+        type: Number,
         required: [true, "Scene needs a width"]
     },
     height: {
-        type: Integer,
+        type: Number,
         required: [true, "Scene needs a height"]
     },
     image:{
         type: String
+    },
+    tokens:{
+        type: Array
     }
 })
 

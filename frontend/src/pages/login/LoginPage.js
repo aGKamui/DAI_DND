@@ -12,15 +12,22 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect } from 'react';
-import { Route, Routes, BrowserRouter  } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Register from './RegisterPage.js';
+import Cookies from 'js-cookie';
+
+
+
 
 const defaultTheme = createTheme();
-
 function SignIn() {
 
-  const sendToDashboard = () => {
+
+  const sendToDashboard = (response) => {
+    //localStorage.setItem('dataKey', response.token)
+    Cookies.set("Token", response.token)
     window.location.href = '/dashboard';
+    
   };
 
   const handleSubmit = (event) => {
@@ -32,25 +39,27 @@ function SignIn() {
       password: data.get('password'),
     });
 
-    fetch('http://localhost:8000/api/auth/login', {
+    fetch('http://127.0.0.1:8000/api/auth/login', {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Credentials': true,
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*',        
         'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
         'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
       },
       body: JSON.stringify({ username: data.get('email'), password: data.get('password') }),
     })
-      .then(response => {
+      .then(response => {        
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.json();
+        
+        return response.json(); 
       })
-      .then(() => {
-        sendToDashboard();
+      .then(response => {        
+        sendToDashboard(response);
       })
       .catch(error => {
         console.log(error);
@@ -58,9 +67,9 @@ function SignIn() {
 
   };
   return (
-        
+
     <ThemeProvider theme={defaultTheme}>
-    
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -84,6 +93,7 @@ function SignIn() {
               id="email"
               label="Email de Utilizador"
               name="email"
+              defaultValue={"Isaacs"}
               autoComplete="email"
               autoFocus
             />
@@ -94,6 +104,7 @@ function SignIn() {
               name="password"
               label="Password"
               type="password"
+              defaultValue={"blabla"}
               id="password"
               autoComplete="current-password"
             />
@@ -109,7 +120,7 @@ function SignIn() {
             >
               Sign In
             </Button>
-            
+
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">

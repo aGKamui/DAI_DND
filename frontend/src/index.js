@@ -8,7 +8,11 @@ import { CssBaseline } from '@mui/material';
 import { store } from './redux/store.ts';
 import App from './App';
 import { Route, Routes, BrowserRouter  } from 'react-router-dom';
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
 root.render(
   
   <BrowserRouter>

@@ -9,8 +9,8 @@ const UserSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ["Whale","Dophin","Free"],
-        required: [true, "User needs a type (Paid or Free)"]
+        enum: ["Whale","Dolphin","Free"],
+        required: [true, "User needs a type (Free, Dolphin or Whale)"]
     },
     password: {
         type: String,
@@ -26,6 +26,9 @@ const UserSchema = new Schema({
     },
     campaigns: {
         type: Array
+    },
+    token: {
+        type: String
     }
 
 })

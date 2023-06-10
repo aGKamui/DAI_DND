@@ -1,41 +1,47 @@
 const path = require("path");
 const express = require("express");
-const session = require("express-session");
 const bodyParser = require("body-parser");
 const authenticationRoutes = require("./route/auth.route");
 const userRoutes = require("./route/user.route");
-
+const diceRoutes = require("./route/dice.route");
 const logger = require("./logger/api.logger");
+const characterRoutes = require("./route/character.route");
+const purchaseRoutes = require("./route/purchase.route");
+const campaignRoutes = require("./route/campaign.route");
+const sceneRoutes = require("./route/scene.route");
+
+
 
 const app = express();
 const port = process.env.PORT || 8000;
+const cors = require('cors');
+
 
 app.use(express.static(path.join(__dirname, "./frontend/build")));
 app.use(bodyParser.json());
-const cors = require('cors');
-
-app.use(
-  cors({
-    origin : "*"
-  })
-)
 
 
-// Configure session middleware
-app.use(
-  session({
-    secret: 'qjF36qhSdXYYzfgnG9Z8sFSDaFYSPXym',     // Secret key used to sign the session ID cookie
-    resave: false,                 // Whether to save the session to the store on every request
-    saveUninitialized: false       // Whether to save uninitialized sessions to the store
-  })
-);
+app.use(cors({
+  origin : ["http://localhost:3000","http://127.0.0.1:3000"],
+  credentials: true, // <= Accept credentials (cookies) sent by the client
+}));
+
+
+app.use(express.static('public'))
 
 app.use("/api/auth", authenticationRoutes);
 
 app.use("/api/user", userRoutes);
 
+app.use("/api/dice", diceRoutes);
 
+app.use("/api/character", characterRoutes); 
 
+app.use("/api/purchase", purchaseRoutes);
+
+app.use("/api/campaign", campaignRoutes);
+
+app.use("/api/scene", sceneRoutes);
 
 app.get("/random", (req, res) => {
   res.status = 418;

@@ -2,12 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const CharacterSchema = new Schema({
-    hitpoints:{
+    hitpoints: {
         type: [Number],
         required: [true, "Character must have hitpoints"]
-    },
-    equipment:{
-        type: Array
     },
     senses:{
         type: Array,
@@ -44,15 +41,16 @@ const CharacterSchema = new Schema({
         type: Array
     },
     weaknesses:{
-        type: Map,
-        of: Number
-    },
-    Resistances:{
-        type: Map,
-        of: Number
-    },
-    Immunities:{
         type: Array
+    },
+    resistances:{
+        type: Array
+    },
+    immunities:{
+        type: Array
+    },
+    image:{
+        type: String
     }
     
 })

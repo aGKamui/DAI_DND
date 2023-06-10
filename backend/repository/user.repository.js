@@ -7,15 +7,26 @@ class UserRepository {
   }
 
   async getUser(username){
-    return await User.find({username:username});
+    return await User.findOne({username:username});
   }
 
-  async changeType(username, type){
-    return await User.findOneAndUpdate({username:username}, type);
+  async update(username, toChange){
+    return await User.findOneAndUpdate({username:username}, toChange);
+  }
+
+  async addCampaign(username, campaign){
+    let user = await User.findOne({username: username});
+    user.campaigns.push(campaign);
+    await User.updateOne({username: username}, user);
+    return user;
   }
   
   async deleteUser(username){
     return await User.deleteOne({username:username});
+  }
+
+  async exists(param){
+    return await User.findOne(param);
   }
 }
 

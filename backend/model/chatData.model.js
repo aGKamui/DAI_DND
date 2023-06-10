@@ -6,7 +6,7 @@ const ChatDataSchema = new Schema({
         type:String,
         require: [true, "Chat needs a message"]
     },
-    dateOfMessage:{
+    date:{
         type: Date,
         require: [true, "Chat is sent at a specific date"]
     }

@@ -9,6 +9,12 @@ const CampaignSchema = new Schema({
     system: {
         type: String,
         required: [true, "Campaign needs a game system"]
+    },
+    characters: {
+        type: Array
+    },
+    scenes:{
+        type: Array
     }
 })
 
