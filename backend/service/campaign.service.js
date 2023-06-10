@@ -137,6 +137,10 @@ class CampaignService{
         
         return campaigns;
     }
+
+    async uploadImage(campaign_id, image_name){
+        return await campaignRepository.uploadImage(campaign_id, image_name);
+    }
 }
 
 module.exports = new CampaignService();
