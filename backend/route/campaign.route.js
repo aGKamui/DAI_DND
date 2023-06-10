@@ -42,7 +42,7 @@ router.put("/:id", async (req, res) => {
         return res.status(404).send("Information not found.")
     }
     if(campaign === 403){
-        return res.status(401).send("Not enough permissions.")
+        return res.status(403).send("Not enough permissions.")
     }
     if(campaign === 400){
         return res.status(400).send("Invalid changes.")
