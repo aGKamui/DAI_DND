@@ -6,8 +6,14 @@ import Draggable from "react-draggable";
 import Grid from "./Grid.js"
 
 
-const PopupRight = ({id}) => {
+const PopupRight = ({imagem}) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const containerStyle = {
+    backgroundImage: `url(${imagem})`,
+    width: 50,
+    height: 50,
+  };
 
   const togglePopup = () => {
     setIsOpen(!isOpen);
@@ -51,10 +57,9 @@ const PopupRight = ({id}) => {
           <div
           className="handle" 
           onContextMenu={togglePopup}       
-          style={{
-            width: 50,
-            height: 50,
-          }}/>  
+          style={
+            containerStyle
+          }/>  
       </Draggable>
         
 

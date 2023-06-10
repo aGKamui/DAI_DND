@@ -3,13 +3,47 @@ import Draggable from "react-draggable";
 import $ from "jquery";
 import Grid from "./Grid";
 import "./Grid.css"
-import ToolBar from "./ToolBar";
+
 import { useState, useEffect } from 'react';
 import PopupRight from "./popup-right.js";
 import Popup from "./popup";
+import PopupBackground from "./popup-background";
 
 export default function App() {
-  const [tokens, setTokens] = useState([<PopupRight id ="1" /> , <PopupRight id ="2"/>, <PopupRight id ="3"/>]);
+  const [tokens, setTokens] = useState([<PopupRight imagem={"https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png"} /> , <PopupRight imagem={"https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png"} />, <PopupRight imagem={"https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png"} />]);
+
+  const [background, setBackground] = useState("https://cdn.discordapp.com/attachments/912106609235357756/1115607247440060457/TC_Bandit_Hideout_01_Caverns_Free_34x22.jpg");
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
+  
+
+  const [inputValue, setInputValue] = useState('');
+  const [inputValue2, setInputValue2] = useState('');
+
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleInputChange2 = (event) => {
+    setInputValue2(event.target.value);
+  };
+
+
+  
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
+  const togglePopup2 = () => {
+    setIsOpen2(!isOpen2);
+  };
+
+  const changeBackground = (url) => {
+    setBackground(url)
+    togglePopup()
+  };
 
   const removeToken = (index) => {
     setTokens((tokens)=> {
@@ -20,8 +54,8 @@ export default function App() {
     };
   
   
-  const addToken = () => {
-    setTokens((tokens) => [...tokens, <PopupRight id ="1" />])
+  const addToken = (url) => {
+    setTokens((tokens) => [...tokens, <PopupRight imagem={url}  />])
   };
 
   useEffect(() => {
@@ -49,10 +83,53 @@ Tool Bar
 
 
 <div ><Popup desc_Botao={"Roll"}></Popup></div>
-<div onClick={addToken}><Popup desc_Botao={"Add"}></Popup></div>
-<div><Popup desc_Botao={"Remove"}></Popup></div>
-<div><Popup desc_Botao={"Background"}></Popup></div>
 
+
+<div>
+      <button className="roll" onClick={togglePopup2}>Add</button>
+      {isOpen2 && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h2>Criar Token</h2>
+            <p>Insira aqui o URL para criar o token</p>
+           
+            
+            <div><input type="text" value={inputValue2} onChange={handleInputChange2} /></div>
+
+            <div>
+
+            
+            <button type="submit" onClick={()=>addToken(inputValue2)}>Confirmar</button>
+            <button onClick={togglePopup2}>Close</button>
+            </div>
+            
+          </div>
+        </div>
+      )}
+    </div>
+
+<div>
+      <button className="roll" onClick={togglePopup}>Background</button>
+      {isOpen && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h2>Alterar o background</h2>
+            <p>Insira aqui o URL do mapa pretendido</p>
+           
+            
+            <div><input type="text" value={inputValue} onChange={handleInputChange} /></div>
+
+            <div>
+
+            
+            <button type="submit" onClick={()=>changeBackground(inputValue)}>Confirmar</button>
+            <button onClick={togglePopup}>Close</button>
+            </div>
+            
+          </div>
+        </div>
+      )}
+    </div>
 
 
 
@@ -71,7 +148,7 @@ Tool Bar
 
 
       <Grid count= {336}
-      backgroundURL="https://cdn.discordapp.com/attachments/912106609235357756/1115607247440060457/TC_Bandit_Hideout_01_Caverns_Free_34x22.jpg">
+      backgroundURL= {background}>
       </Grid>
 
       

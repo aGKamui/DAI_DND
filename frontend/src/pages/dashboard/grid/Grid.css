@@ -35,13 +35,14 @@
 }
 
 .handle {
-  background-image: url("https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png");
+  
   
   background-repeat: no-repeat;
   color: aliceblue;
   height: 50px;
   font-size: 30px;
   text-align: center;
+  border-radius: 50%;
 }
 
 .tool-bar{
