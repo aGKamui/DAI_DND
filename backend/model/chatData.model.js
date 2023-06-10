@@ -2,13 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ChatDataSchema = new Schema({
-    message:{
-        type:String,
-        require: [true, "Chat needs a message"]
-    },
-    date:{
-        type: Date,
-        require: [true, "Chat is sent at a specific date"]
+    messages:{
+        type:Array,
+        require: [true, "Chat needs to exist"]
     }
 })
 
