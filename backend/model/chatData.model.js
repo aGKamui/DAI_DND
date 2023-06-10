@@ -8,6 +8,6 @@ const ChatDataSchema = new Schema({
     }
 })
 
-const chatData = mongoose.model("diceData", ChatDataSchema);
+const chatData = mongoose.model("chatData", ChatDataSchema);
 
 module.exports = chatData;
