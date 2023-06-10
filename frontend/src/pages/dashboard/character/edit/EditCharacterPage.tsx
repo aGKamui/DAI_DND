@@ -80,7 +80,18 @@ function CharacterPage() {
 
   const [selectedClass, setSelectedClass] = useState('');
 
+  const handleUncheckAll = () => {
+    try {
+
+    } catch (error) {
+      
+    }
+    
+  };
+
+
   const handleClassChange = (event: SelectChangeEvent) => {
+    setSelectedCheckboxes([]);
     setSelectedClass(event.target.value as string);
     getClassSubInfoAPI(event.target.value)
   };
@@ -103,6 +114,12 @@ function CharacterPage() {
       setIsLoading(false)
     }
   }, [classSubData]);
+
+  useEffect(() => {
+    if (selectedTab === 2 && tooltipContent === "Loading...") {
+      setTooltipContent("Loading...")
+    }
+  }, [tooltipContent]);
 
   async function getClassInfoAPI() {
     try {
@@ -243,7 +260,7 @@ function CharacterPage() {
 
   async function getProficiencyInfoAPI(apiURL) {
     try {
-      const response = await fetch('https://www.dnd5eapi.co/api/' + apiURL.replace('Skill: ', '/skills/').toLowerCase(), {
+      const response = await fetch('https://www.dnd5eapi.co/api' + apiURL.replace('Skill: ', '/skills/').replace(' ', '-').toLowerCase(), {
         method: "GET"
       })
       const jsonData = await response.json();
@@ -273,8 +290,12 @@ function CharacterPage() {
   }
 
   let tooltip_temp = "";
-  const getProficiencyTooltip = (apiURL) => {    
-    getProficiencyInfoAPI(apiURL.target.outerText);
+  const getProficiencyTooltip = (apiURL) => {
+    setTooltipContent("Loading...")
+    setTimeout(() => {
+      getProficiencyInfoAPI(apiURL.target.outerText);
+    }, 225);
+
   };
 
 
@@ -289,12 +310,18 @@ function CharacterPage() {
 
 
 
-  const handleChange = (event) => {
+  const handleChange = (event, sel_class) => {
     const checkboxValue = event.target.value;
     const isChecked = event.target.checked;
-
+    let proficiencyCap = 2;
+    if (sel_class === "Rogue"){
+      proficiencyCap = 4;
+    }else if(sel_class === "Bard" || sel_class === "Ranger"){
+      proficiencyCap = 3;
+    }
+    
     if (isChecked) {
-      if (selectedCheckboxes.length < 2) {
+      if (selectedCheckboxes.length < proficiencyCap) {
         setSelectedCheckboxes([...selectedCheckboxes, checkboxValue]);
       }
     } else {
@@ -609,15 +636,19 @@ function CharacterPage() {
                   {selectedClass !== "" && <>
                     <p style={{ paddingTop: 10 }}>{classSubData.proficiency_choices[0].desc}</p>
                     <p>{classSubData.name} </p><img src={classImages[classSubData.name]} style={{ maxWidth: '100%', maxHeight: '100%' }} alt={classSubData.name} />
+
+                  
+
                     <FormGroup style={{ display: 'flex', flexDirection: "row" }}>
                       {classSubData.proficiency_choices[0].from.options.map((item, index) => (
+
                         <Grid item key={index}>
                           <Tooltip title={tooltipContent} arrow onMouseEnter={getProficiencyTooltip}>
                             <FormControlLabel
                               control={
                                 <Checkbox
                                   value={`checkbox${index}`}
-                                  onChange={handleChange}
+                                  onChange={(event) => handleChange(event, classSubData.name)}
                                   checked={selectedCheckboxes.includes(`checkbox${index}`)}
                                 />
                               }
