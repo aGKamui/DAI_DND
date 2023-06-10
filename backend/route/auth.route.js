@@ -69,16 +69,18 @@ router.post("/register", async (req, res) => {
       username: username,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password: encryptedPassword,
-      type: "Free"
+      type: "Free",
+      campaigns: [],
+      characters: []
     });
 
     // Create token
     const token = jwt.sign(
-      {user_id: user.username},
+      {username: user.username},
       process.env.JWT_SECRET_KEY,
       { expiresIn: "2h" }
     );
-
+    
     // save user token
     user.token = token;
 

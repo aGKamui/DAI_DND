@@ -40,7 +40,7 @@ router.put("/:id", async (req, res) => {
         return res.status(404).send("Information not found.")
     }
     if(campaign === 403){
-        return res.status(401).send("You're not the owner of this campaign.")
+        return res.status(401).send("Not enough permissions.")
     }
     if(campaign === 400){
         return res.status(400).send("Invalid changes.")
@@ -53,7 +53,15 @@ router.get("/", async(req, res) => {
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");
     }
-    return res.json(await campaignController.getCampaigns(AuthedUser.username))
+    return res.status(200).json(await campaignController.getCampaigns(AuthedUser.username))
+})
+
+router.delete("/:id", async(req, res) => {
+    AuthedUser = await authService.verifyToken(req.headers.auth);
+    if(AuthedUser === 401){
+        return res.status(401).send("Invalid Token.");
+    }
+    return res.json(await campaignController.deleteCampaign(req.params.id, AuthedUser.username))
 })
 
 module.exports = router;

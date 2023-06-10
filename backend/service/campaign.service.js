@@ -2,16 +2,25 @@ const campaignRepository = require("../repository/campaign.repository");
 const sceneRepository = require("../repository/scene.repository");
 const userRepository = require("../repository/user.repository");
 const characterRepository = require("../repository/character.repository");
+const chatRepository = require("../repository/chat.repository");
+const chatData = require("../model/chatData.model");
 
 class CampaignService{
     async createCampaign(campaignInfo, username){
+        const user = userRepository.getUser(username)
+        if(user.type == "Free"){
+            return 403
+        }
         const scene = await sceneRepository.createScene({
             width: 40,
             height: 40,
             image: "blank",
             tokens: []
         });
-        const campaign = await campaignRepository.createCampaign(campaignInfo, scene._id);
+        const chat = await chatRepository.createChat({
+            messages:[]
+        })
+        const campaign = await campaignRepository.createCampaign(campaignInfo, scene._id, chat._id);
         await userRepository.addCampaign(username, campaign._id);
         return campaign;
     }
@@ -38,8 +47,8 @@ class CampaignService{
     }
 
     async updateCampaign(campaignId, username, toChange){
-        const {title, system, characters, scenes} = toChange;
-        if(!title && !system && !characters && !scenes){
+        const {title, system, characters, scenes, bio, image, chatId } = toChange;
+        if((!title && !system && !characters && !scenes && !bio && !chatId) || image){
             return 400;
         }
         const user = await userRepository.getUser(username);
@@ -48,11 +57,12 @@ class CampaignService{
             return 404;
         }
         if(user.campaigns.includes(campaignId)){
-            if((characters && await this.unknownCharacters(characters)) || (scenes && await this.unknownScenes(scenes))){
+            if((characters && await this.unknownCharacters(characters)) || (scenes && await this.unknownScenes(scenes)) ||
+                (chatId && await this.unknownChat(chatId))){
                 return 404;
             }
             if((characters && this.isCharacterInAnotherCampaign(await this.getCampaignIdsByCharacterList(characters),campaignId)) ||
-               (scenes && await this.isSceneInAnotherCampaign(scenes, campaignId))
+               (scenes && await this.isSceneInAnotherCampaign(scenes, campaignId) || (chatId && await this.isChatFromAnotherCampaign(chatId)))
             ){
                 return 400;
             }
@@ -63,8 +73,11 @@ class CampaignService{
         return 403;
     }
 
+    async unknownChat(chatId){
+        return await chatData.exists(chatId)
+    }
+
     async unknownCharacters(characters){
-        
         for(const element of characters){
             if((await characterRepository.exists(element)) == 404){
                  return true
@@ -114,17 +127,29 @@ class CampaignService{
         return true
     }
 
+    async isChatFromAnotherCampaign(chatId, campaignId){
+        for(const campaign in await campaignRepository.getAll()){
+            if(campaign.chatId == chatId && !(campaign._id == campaignId)){
+                return false
+            }
+        }
+        return true
+    }
+
     async getCampaigns(username){
         const user = await userRepository.getUser(username);
         let campaigns = []
-        const playsIn = await this.getCampaignIdsByCharacterList(user.characters)
-        if(playsIn){
-            (playsIn).forEach((element) => {
-                campaigns.push(element);
-            });
-        }
-        const owns = user.campaigns
-        if(owns){
+
+        if(user.characters){
+            const playsIn = await this.getCampaignIdsByCharacterList(user.characters)
+            console.log(playsIn)
+            if(playsIn){
+                (playsIn).forEach((element) => {
+                    campaigns.push(element);
+                });
+            }
+        };
+        if(user.campaigns){
             user.campaigns.forEach((element) => {
                 campaigns.push(element);
             });
@@ -136,6 +161,25 @@ class CampaignService{
         }
         
         return campaigns;
+    }
+
+    async deleteCampaign(campaignId, username){
+        const user = await userRepository.getUser(username);
+        const campaign = await campaignRepository.getCampaign(campaignId)
+        if(!(campaign)){
+            return 404
+        }
+        if(user.campaigns.includes(campaignId)){
+            for(let index; index < campaign.scenes.length; index++){
+                
+                await sceneRepository.deleteScene(campaign.scenes[index]);
+            }
+            chatRepository.deleteChat(campaign.chatId)
+            campaignRepository.deleteCampaign(campaignId);
+            userRepository.deleteCampaign(username, campaignId);
+            return campaign;
+        }
+        return 403;
     }
 }
 

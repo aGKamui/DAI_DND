@@ -6,9 +6,10 @@ class CampaignRepository {
       connect();
     }
 
-    async createCampaign( campaignInfo, scene){
+    async createCampaign( campaignInfo, scene, chat){
         let campaign = await Campaign.create(campaignInfo);
         campaign.scenes = [scene];
+        campaign.chatId = chat
         await Campaign.updateOne({_id: campaign._id}, campaign);
         return campaign;
     }
@@ -27,6 +28,10 @@ class CampaignRepository {
 
     async getAll(){
         return await Campaign.find()
+    }
+
+    async deleteCampaign(campaignId){
+        return await Campaign.deleteOne({_id: campaignId})
     }
 }
 

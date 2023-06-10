@@ -23,6 +23,10 @@ class SceneRepository {
         return scene;
       } catch (error) { return 403 }
     }
+
+    async deleteScene(sceneId){
+        return await Scene.deleteOne({_id: sceneId})
+    }
 }
 
 module.exports = new SceneRepository();

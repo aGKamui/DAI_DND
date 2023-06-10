@@ -15,7 +15,9 @@ class UserRepository {
   }
 
   async addCampaign(username, campaign){
+    console.log(username);
     let user = await User.findOne({username: username});
+    console.log(user);
     user.campaigns.push(campaign);
     await User.updateOne({username: username}, user);
     return user;
@@ -27,6 +29,12 @@ class UserRepository {
 
   async exists(param){
     return await User.findOne(param);
+  }
+
+  async deleteCampaign(username, campaignId){
+    let user = await User.findOne({username: username});
+    user.campaigns.splice(user.campaigns.indexOf(campaignId), 1);
+    await User.updateOne({username: username}, user);
   }
 }
 
