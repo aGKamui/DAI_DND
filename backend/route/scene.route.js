@@ -24,7 +24,7 @@ router.get("/:id/:value", async (req, res) => {
     //! error Handling missing since the return from db can be a int!!
 });
 
-router.post("/:id/image", upload.single('image'), async (req, res) => {
+router.put("/:id/image", upload.single('image'), async (req, res) => {
     AuthedUser = await authService.verifyToken(req.headers.auth);
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");

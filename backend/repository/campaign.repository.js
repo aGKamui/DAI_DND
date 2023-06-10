@@ -30,6 +30,15 @@ class CampaignRepository {
         return await Campaign.find()
     }
 
+    async uploadImage(campaign_id, image_name){
+        try {
+          let campaign = await Campaign.findById(campaign_id)
+          campaign.image = "/images/" + image_name
+          campaign.save();
+          return campaign;
+        } catch (error) { return 403 }
+      }
+
     async deleteCampaign(campaignId){
         return await Campaign.deleteOne({_id: campaignId})
     }

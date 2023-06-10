@@ -9,12 +9,8 @@ class SceneController {
   async getSceneValue(scene_id, value) {
     return (await sceneService.getScene(scene_id))[value];
   };
-  
-
   async uploadImage(scene_id, image_name){
     return await sceneService.uploadImage(scene_id, image_name);
-
-  }
-
+  };
 }
 module.exports = new SceneController();

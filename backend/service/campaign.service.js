@@ -163,6 +163,10 @@ class CampaignService{
         return campaigns;
     }
 
+    async uploadImage(campaign_id, image_name){
+        return await campaignRepository.uploadImage(campaign_id, image_name);
+    }
+
     async deleteCampaign(campaignId, username){
         const user = await userRepository.getUser(username);
         const campaign = await campaignRepository.getCampaign(campaignId)
