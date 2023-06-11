@@ -5,7 +5,7 @@ import DashboardOutLinedIcon from "@mui/icons-material/DashboardOutlined.js";
 import DashboardPageLayout from "../pages/dashboard/DashboardPageLayout.tsx";
 import DefaultPage from "../pages/dashboard/DefaultPage.tsx";
 import DashboardIndex from "../pages/dashboard/DashboardIndex.tsx";
-import Pricing from "../pages/dashboard/pricing/Pricing.js";
+import Pricing from "../pages/dashboard/pricing/Pricing.tsx";
 import MyCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.tsx";
 import MyCampaignPage from "../pages/dashboard/campaigns/MyCampaignPage.tsx";
 import Perfil from "../pages/dashboard/perfil/Perfil.tsx";
