@@ -49,8 +49,8 @@ function CreateNewCampaignPage() {
 
   async function createCampaign(campData) {
     try {
-      const response = await fetch('http://localhost:8000/api/campaign/' + campData._id + "", {
-        method: "PUT",
+      const response = await fetch('http://localhost:8000/api/campaign/', {
+        method: "POST",
         headers: {
           'auth': Cookies.get("Token"),
           'Accept': 'application/json',
@@ -120,7 +120,7 @@ function CreateNewCampaignPage() {
 
                 <Button
                   type="submit"
-                  onClick={() => { }}
+                  onClick={createCampaign}
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >

@@ -26,6 +26,7 @@ import Pricing from './pages/dashboard/pricing/Pricing.tsx';
 import EditCharacterPage from './pages/dashboard/character/edit/EditCharacterPage.tsx';
 import CreateNewCharacterPage from './pages/dashboard/character/add/NewCharacterPage.tsx';
 import CreateNewCampaignPage from './pages/dashboard/campaigns/NewCampaignPage.tsx';
+import Logout from './pages/dashboard/logout.tsx';
 
 
 
@@ -44,6 +45,7 @@ function App() {
         <Route path="/dashboard/myCharacters/:id" element={<EditCharacterPage />} />
         {/*<Route path='*' element={<Navigate to="/login" replace={true} />} /> */}
         <Route path="/dashboard/profile" element={<Perfil />} />
+        <Route path="/dashboard/logout" element={<Logout />} />
       </Routes>
   );
 }

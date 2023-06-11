@@ -11,6 +11,7 @@ import MyCampaignPage from "../pages/dashboard/campaigns/MyCampaignPage.tsx";
 import Perfil from "../pages/dashboard/perfil/Perfil.tsx";
 import NewCharacterPage from "../pages/dashboard/character/edit/MyCharacterPage.tsx";
 import NewCampaignPage from "../pages/dashboard/campaigns/MyCampaignPage.tsx";
+import Logout from "../pages/dashboard/logout.tsx";
 
 
 const appRoutes: RouteType[] = [
@@ -95,6 +96,15 @@ const appRoutes: RouteType[] = [
         state: "dashboard.testepage",
         sidebarProps: {
             displayText: "Perfil",
+            icon: <DashboardOutLinedIcon/>
+        }
+    },
+    {
+        path: "/dashboard/logout",
+        element: <Logout/>,
+        state: "dashboard.testepage",
+        sidebarProps: {
+            displayText: "Logout",
             icon: <DashboardOutLinedIcon/>
         }
     }
