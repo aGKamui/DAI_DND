@@ -42,6 +42,20 @@ class CampaignRepository {
     async deleteCampaign(campaignId){
         return await Campaign.deleteOne({_id: campaignId})
     }
+
+    async addCharacter(campaignId, character){
+        let campaign = await Campaign.findOne({_id: campaignId});
+        campaign.characters.push(character);
+        await Campaign.updateOne({_id: campaignId}, campaign);
+        return campaign;
+      }
+
+      async deleteCharacter(campaignId, character){
+        let campaign = await Campaign.findOne({_id: campaignId});
+        campaign.characters.splice(campaign.characters.indexOf(character), 1);
+        await Campaign.updateOne({_id: campaignId}, campaign);
+        return campaign
+      }
 }
 
 module.exports = new CampaignRepository();

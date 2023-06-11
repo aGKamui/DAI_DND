@@ -25,6 +25,14 @@ class CampaignController {
     async deleteCampaign(campaignId, username){
         return await campaignService.deleteCampaign(campaignId, username);
     }
+    
+    async addCharacter(campaignId, characterId, username){
+        return await campaignService.addCharacter(campaignId, characterId, username);
+    }
+
+    async deleteCharacter(campaignId, characterId, username){
+        return await campaignService.deleteCharacter(campaignId, characterId, username);
+    }
 }
 
 
