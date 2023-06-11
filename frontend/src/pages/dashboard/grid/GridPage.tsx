@@ -10,7 +10,7 @@ import Popup from "./popup";
 import PopupBackground from "./popup-background";
 
 export default function App() {
-  const [tokens, setTokens] = useState([<PopupRight imagem={"https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png"} /> , <PopupRight imagem={"https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png"} />, <PopupRight imagem={"https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png"} />]);
+  const [tokens, setTokens] = useState([<PopupRight imagem={"https://cdn.discordapp.com/attachments/1072285447537037333/1115304718399459328/token_1_1.png"}  />]);
 
   const [background, setBackground] = useState("https://cdn.discordapp.com/attachments/912106609235357756/1115607247440060457/TC_Bandit_Hideout_01_Caverns_Free_34x22.jpg");
 
