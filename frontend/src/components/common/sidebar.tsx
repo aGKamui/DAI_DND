@@ -11,7 +11,7 @@ import Cookies from 'js-cookie';
 
 
 const Sidebar = () => {
-const [tierInfo, setTierInfo] = useState("");
+  const [tierInfo, setTierInfo] = useState("");
   useEffect(() => {
     getUserStatus();
   }, []);
@@ -26,10 +26,10 @@ const [tierInfo, setTierInfo] = useState("");
         },
       });
       const jsonData = await response.json();
-        setTierInfo(jsonData)
-        console.log(typeof(jsonData));
-    
-  
+      setTierInfo(jsonData)
+      console.log(typeof (jsonData));
+
+
     } catch (error) {
       console.error('Error fetching data:', error);
       window.location.href = '/login';
@@ -64,7 +64,6 @@ const [tierInfo, setTierInfo] = useState("");
         </Toolbar>
         {appRoutes.map((route, index) => {
           const currentRoute = route; // Store the route in a variable
-          console.log(currentRoute); // Log the route
           if (tierInfo === "Free" && currentRoute.child) {
             currentRoute.child = currentRoute.child.filter(child => child.path !== "/dashboard/newCampaign");
           }

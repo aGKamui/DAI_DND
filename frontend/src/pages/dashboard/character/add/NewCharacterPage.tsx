@@ -66,6 +66,19 @@ function CreateNewCharacterPage() {
   const [int, setInt] = useState(0);
   const [wis, setWis] = useState(0);
   const [cha, setCha] = useState(0);
+  const [maxHP, setMaxHP] = useState(0);
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+
+
+
+  const [invent, setInvent] = useState([]);
+
+
+
+
+  const [errorMsg, setErrorMsg] = useState("");
+
 
   const classImages = {
     "Barbarian": "https://www.dndbeyond.com/avatars/thumbnails/6/342/420/618/636272680339895080.png",
@@ -117,36 +130,6 @@ function CreateNewCharacterPage() {
   }, [tooltipContent]);
 
 
-  async function getSkillAPI() {
-    try {
-      setIsLoading(true);
-      const response = await fetch('https://www.dnd5eapi.co/api/skills', {
-        method: "GET"
-      })
-      const jsonData = await response.json();
-      setSkillData(jsonData["results"]);
-
-
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
-
-  async function getEquipmentInfoAPI() {
-    try {
-      setIsLoading(true);
-      const response = await fetch('https://www.dnd5eapi.co/api/equipment', {
-        method: "GET"
-      })
-      const jsonData = await response.json();
-      setEquipmentData(jsonData["results"]);
-
-
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
 
   async function getClassInfoAPI() {
     try {
@@ -288,26 +271,212 @@ function CreateNewCharacterPage() {
     }
   }
 
+
+
   async function createCharacter() {
-    try {
-      const response = await fetch('http://localhost:8000/api/character/', {
-        method: "POST",
-        headers: {
-          'auth': Cookies.get("Token"),
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-          {
-          }
-        ),
 
+    let acrobatics = ""
+    let animalhandling = ""
+    let arcana = ""
+    let athletics = ""
+    let deception = ""
+    let history = ""
+    let insight = ""
+    let intimidation = ""
+    let investigation = ""
+    let medicine = ""
+    let nature = ""
+    let perception = ""
+    let performance = ""
+    let persuasion = ""
+    let religion = ""
+    let sleightofhand = ""
+    let stealth = ""
+    let survival = ""
+
+    let baseProfs = []
+
+    function labelCleaner(label) {
+      console.log("teste")
+      baseProfs.push(label);
+      label = label.replace('Skill: ', '').replace(' ', '').toLowerCase();
+      eval(label + "= \"t\"");
+
+    }
+
+    Object.values(selectedCheckboxes).map((label, index) => (
+      labelCleaner(label)
+    ))
+
+    
+
+    if (name === "") {
+      setErrorMsg("Erro - Nome Vazio")
+
+    } else if (bio === "") {
+      setErrorMsg("Erro - Bio Vazia")
+    } else if (selectedClass === "") {
+      setErrorMsg("Erro - Não selecionou classe.")
+    } else {
+      console.log(Object.values(selectedCheckboxes))
+
+      let starterProficienciesArray = [];
+      classSubData.proficiencies.map((item, index) => {
+        console.log(item)
+        starterProficienciesArray.push(item.name);
       })
-      const jsonData = response;
-      console.log(jsonData);
 
-    } catch (error) {
-      console.error('Error fetching data:', error);
+      baseProfs.map((prof, index) => (
+        logProf(prof)
+      ))
+
+      function logProf(prof){
+        starterProficienciesArray.push(prof);
+      }
+
+      let equipmentArray = [];
+      classSubData.starting_equipment.map((item, index) => {
+        console.log(item)
+        equipmentArray.push(item.equipment.name);
+      })
+      console.log(equipmentArray)
+
+      
+      console.log(classSubData)
+
+      try {
+
+        const response = await fetch('http://localhost:8000/api/character/', {
+          method: "POST",
+          headers: {
+            'auth': Cookies.get("Token"),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+              "hitpoints": [
+                maxHP,
+                maxHP,
+              ],
+              "equipment": equipmentArray
+              ,
+              "proficiencies": starterProficienciesArray
+              ,
+              "senses": [
+                "Darkvision",
+                "Low-Light Vision"
+              ],
+              "speedtypes": {
+                "walk": 30,
+                "burrow": 0,
+                "climb": 0,
+                "fly": 0,
+                "swim": 0
+              },
+              "abilityscores": {
+                "str": str,
+                "dex": dex,
+                "con": con,
+                "int": int,
+                "wis": wis,
+                "cha": cha
+              },
+              "ancestryfeatures": [
+                ""
+              ],
+              "classfeatures": [
+                ""
+              ],
+              "coreskills": {
+                "perception": perception,
+                "animalHandling": animalhandling,
+                "history": history,
+                "insight": insight,
+                "acrobatics": acrobatics,
+                "arcana": arcana,
+                "athletics": athletics,
+                "sleightofHand": sleightofhand,
+                "deception": deception,
+                "persuasion": persuasion,
+                "intimidation": intimidation,
+                "medicine": medicine,
+                "nature": nature,
+                "investigation": investigation,
+                "performance": performance,
+                "religion": religion,
+                "stealth": stealth,
+                "survival": survival,
+                "lore": {
+                  "alkenstar": "t"
+                },
+                "weapon": {
+                  "advanced": "u",
+                  "martial": "u",
+                  "simple": "t",
+                  "unarmed": "t"
+                },
+                "armor": {
+                  "heavy": "u",
+                  "medium": "u",
+                  "light": "u",
+                  "unarmored": "u"
+                }
+              },
+              "information": {
+                "name": name,
+                "bio": bio,
+                "ancestry": "Elf",
+                "heritage": "Dhampir",
+                "class": selectedClass,
+                "background": "Wanted Witness",
+                "gender/pronouns": "Male He/Him",
+                "age": "189",
+                "height": "6'8",
+                "weight": "220 lbs",
+                "ethnicity": "Kyonin",
+                "nationality": "Geb/Alkenstar",
+                "size": 1,
+                "languages": [
+                  "Common",
+                  "Dwarven",
+                  "Elven",
+                  "Halfling",
+                  "Kelish",
+                  "Necril"
+                ],
+                "deity": "",
+                "allignment": "Chaotic Neutral",
+                "image": "imageurl"
+              },
+              "inventory": [""],
+              "spells": [
+                ""
+              ],
+              "weaknesses": {
+                "fire": 5,
+                "cold": 2
+              },
+              "resistances": {
+                "thunder": 10
+              },
+              "immunities": [
+                "Poison",
+                "Paralyzed"
+              ]
+            }
+          ),
+
+        })
+        const jsonData = response;
+        if (response.ok) {
+          setErrorMsg("A personagem foi criada com sucesso!")
+          resetPage()
+        }
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
   }
 
@@ -367,11 +536,11 @@ function CreateNewCharacterPage() {
   }
 
   function updateName(value) {
-    charData.information.name = value;
+    setName(value)
   }
 
   function updateBio(value) {
-    charData.information.bio = value;
+    setBio(value)
   }
 
   const getProficiencyTooltip = (apiURL) => {
@@ -409,9 +578,8 @@ function CreateNewCharacterPage() {
 
   };
 
+  const handleChange = (event, sel_class, itemLabel) => {
 
-
-  const handleChange = (event, sel_class) => {
     const checkboxValue = event.target.value;
     const isChecked = event.target.checked;
     let proficiencyCap = 2;
@@ -422,12 +590,20 @@ function CreateNewCharacterPage() {
     }
 
     if (isChecked) {
-      if (selectedCheckboxes.length < proficiencyCap) {
-        setSelectedCheckboxes([...selectedCheckboxes, checkboxValue]);
+      if (Object.keys(selectedCheckboxes).length < proficiencyCap) {
+        setSelectedCheckboxes(prevSelected => ({
+          ...prevSelected,
+          [checkboxValue]: itemLabel,
+        }));
       }
     } else {
-      setSelectedCheckboxes(selectedCheckboxes.filter(item => item !== checkboxValue));
+      setSelectedCheckboxes(prevSelected => {
+        const updatedSelected = { ...prevSelected };
+        delete updatedSelected[checkboxValue];
+        return updatedSelected;
+      });
     }
+
   };
 
 
@@ -470,7 +646,7 @@ function CreateNewCharacterPage() {
                   <TextField
                     id="information/name"
                     variant="outlined"
-                    defaultValue={"O meu nome"}
+                    defaultValue={name}
                     onChange={(event) => { updateName(event.target.value) }}
                   />
                   <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
@@ -480,7 +656,7 @@ function CreateNewCharacterPage() {
                     multiline
                     fullWidth
                     rows={4}
-                    defaultValue={"A minha Bio."}
+                    defaultValue={bio}
                     onChange={(event) => { updateBio(event.target.value) }}
                     variant="filled"
                   />
@@ -612,7 +788,13 @@ function CreateNewCharacterPage() {
                   <Grid item>
                     <Box sx={{ color: 'text.primary', fontSize: 22, width: 110 }}>
                       Health
-                      <div id='hpdisplay'>0 / 0</div>
+                      <div id='hpdisplay'>0 / <TextField
+                        defaultValue={0}
+                        type="number"
+                        id="information/name"
+                        variant="outlined"
+                        onChange={(event) => { setMaxHP(parseInt(event.target.value)) }}
+                      /></div>
 
                       <Grid container spacing={15} alignItems="center" justifyContent='center'>
                         <Grid item>
@@ -710,8 +892,8 @@ function CreateNewCharacterPage() {
                               control={
                                 <Checkbox
                                   value={`checkbox${index}`}
-                                  onChange={(event) => handleChange(event, classSubData.name)}
-                                  checked={selectedCheckboxes.includes(`checkbox${index}`)}
+                                  onChange={(event) => handleChange(event, classSubData.name, item.item.name)}
+                                  checked={selectedCheckboxes.hasOwnProperty(`checkbox${index}`)}
                                 />
                               }
                               label={item.item.name}
@@ -720,10 +902,16 @@ function CreateNewCharacterPage() {
                         </Grid>
                       ))}
                     </FormGroup>
-                    <p style={{ paddingTop: 10 }}>This class starts with:</p>
+                    <p >Esta classe começa com as seguintes proficiencies:</p>
                     <Box sx={{ display: "flex", justifyContent: "center" }}>
                       {classSubData.proficiencies.map((item, index) => (
-                        <p style={{ paddingTop: 10, fontSize: 15 }}>{item.name}  |  </p>
+                        <><p style={{ paddingTop: 2, fontSize: 18 }}>{item.name}  </p><p style={{ paddingTop: 2, fontSize: 18 }}> |  </p></>
+                      ))}
+                    </Box>
+                    <p >Esta classe começa com o equipmento seguinte:</p>
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                      {classSubData.starting_equipment.map((item, index) => ( 
+                        <><p style={{ paddingTop: 2, fontSize: 18 }}>{item.equipment.name}  </p><p style={{ paddingTop: 2, fontSize: 18 }}> |  </p></>
                       ))}
                     </Box>
                   </>
@@ -734,8 +922,11 @@ function CreateNewCharacterPage() {
             </Grid>
           </Grid>
         }
-
-
+        {errorMsg === "A personagem foi criada com sucesso!" ? (
+          <p style={{ paddingTop: 1, fontSize: 25, color: "green" }}>{errorMsg}</p>
+        ) : (
+          <p style={{ paddingTop: 1, fontSize: 25, color: "red" }}>{errorMsg}</p>
+        )}
         <Button
           type="submit"
           onClick={() => createCharacter()}
@@ -756,6 +947,12 @@ function CreateNewCharacterPage() {
     </>
   );
 }
+function resetPage() {
+  setTimeout(() => { 
+    //window.location.reload()  
+  }, 1000);
+}
 
 
 export default CreateNewCharacterPage;
+

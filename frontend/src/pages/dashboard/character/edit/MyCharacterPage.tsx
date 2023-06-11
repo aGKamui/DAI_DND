@@ -7,10 +7,19 @@ import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, CssB
 import testimage from '../../../../assets/images/nathan-poole-asset.jpg';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import ConfirmationModal from './ConfirmationModal';
 
 type Props = {}
 const NewCharacterPage = (props: Props) => {
     const [data, setData] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleConfirm = (itemID) => {
+        // Perform the action on confirmation
+        // ...
+        deleteCharacterInfo(itemID)
+        setShowModal(false); // Close the modal
+    };
 
     useEffect(() => {
         fetchData();
@@ -27,6 +36,7 @@ const NewCharacterPage = (props: Props) => {
                 }
             })
             const jsonData = await response.json();
+            console.log("teste")
             setData(jsonData);
             console.log(jsonData)
         } catch (error) {
@@ -36,8 +46,26 @@ const NewCharacterPage = (props: Props) => {
 
 
     const editCharacterInfo = (char_id) => {
-        window.location.href = '/dashboard/myCharacters/'+ char_id;
+        window.location.href = '/dashboard/myCharacters/' + char_id;
     };
+    async function deleteCharacterInfo(char_id) {
+
+        try {
+            const response = await fetch('http://localhost:8000/api/character/' + char_id, {
+                method: "DELETE",
+                headers: {
+                    'auth': Cookies.get("Token"),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            const jsonData = await response.json();
+            console.log(jsonData)
+            window.location.href = '/dashboard/myCharacters/'
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
 
     const typographyStyle = {
         fontFamily: 'Josefin Sans',
@@ -75,17 +103,23 @@ const NewCharacterPage = (props: Props) => {
                                         {item.information.name}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary" style={typographyStyle}>
-                                    {item.information.bio}
+                                        {item.information.bio}
                                     </Typography>
                                 </CardContent>
 
                                 <CardActions >
                                     <div className="EditButton">
                                         <Button size="small" onClick={() => editCharacterInfo(item._id)}>Editar</Button>
-                                        
+
                                     </div>
                                     <div className="DeleteButton">
-                                        <Button size="small" >Eliminar</Button>
+                                        <Button size="small" onClick={() => setShowModal(true)}>Eliminar</Button>
+                                        <ConfirmationModal
+                                            isOpen={showModal}
+                                            onRequestClose={() => setShowModal(false)}
+                                            onConfirm={handleConfirm}
+                                            itemID={item._id} // Pass the item ID as a prop
+                                        />
                                     </div>
                                 </CardActions>
                             </Card>

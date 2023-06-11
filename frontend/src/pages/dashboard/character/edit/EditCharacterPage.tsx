@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import "./EditCharacterPage.css";
 import { json, useParams } from "react-router-dom";
 import Sidebar from '../../../../components/common/Sidebar.tsx';
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Checkbox, Container, CssBaseline, FormControl, FormControlLabel, FormGroup, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Tooltip, Typography, createTheme } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Checkbox, Container, CssBaseline, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Tooltip, Typography, createTheme } from '@mui/material';
 
 import testimage from '../../../../assets/images/nathan-poole-asset.jpg';
 import strength from '../../../../assets/images/strength.png';
@@ -52,10 +52,15 @@ function CharacterPage() {
   const [classData, setClassData] = useState([]);
   const [equipmentData, setEquipmentData] = useState([]);
   const [skillData, setSkillData] = useState([]);
+  const [spellData, setSpellData] = useState([]);
+
+
+
   const [classSubData, setClassSubData] = useState([]);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const [tooltipContent, setTooltipContent] = useState('Loading...');
   const [equipmentTooltipContent, setEquipmentTooltipContent] = useState('Loading...');
+  const [spellTooltipContent, setSpellTooltipContent] = useState('Loading...');
 
   const [skillTooltipContent, setSkillTooltipContent] = useState('Loading...');
 
@@ -86,15 +91,16 @@ function CharacterPage() {
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedEquipment, setSelectedEquipment] = useState('');
   const [selectedSkill, setSelectedSkill] = useState('');
+  const [selectedSpell, setSelectedSpell] = useState('');
 
   let url = window.location.href;
 
 
 
-  const handleClassChange = (event: SelectChangeEvent) => {
+  const handleClassChange = (classPicked) => {
     setSelectedCheckboxes([]);
-    setSelectedClass(event.target.value as string);
-    getClassSubInfoAPI(event.target.value)
+    setSelectedClass(classPicked);
+    getClassSubInfoAPI(classPicked)
   };
 
   const handleEquipmentAdd = (event: SelectChangeEvent) => {
@@ -103,6 +109,10 @@ function CharacterPage() {
 
   const handleSkillAdd = (event: SelectChangeEvent) => {
     setSelectedSkill(event.target.value as string);
+  };
+
+  const handleSpellAdd = (event: SelectChangeEvent) => {
+    setSelectedSpell(event.target.value as string);
   };
 
 
@@ -114,6 +124,18 @@ function CharacterPage() {
   useEffect(() => {
     if (selectedTab === 2) {
       setIsLoading(false)
+      getClassSubInfoAPI(charData.information.class)
+      let dynamicKey = ""
+      Object.entries(charData.coreskills).forEach(([key, value]) => {
+        if (value === 't') {
+          const dynamicKey = "Skill: " + key.charAt(0).toUpperCase() + key.slice(1);
+          if (!selectedCheckboxes.includes(dynamicKey)) {
+            setSelectedCheckboxes(prevCheckboxes => [...prevCheckboxes, dynamicKey]);
+          }
+        }
+      });
+
+
     }
   }, [classData]);
 
@@ -122,6 +144,12 @@ function CharacterPage() {
       setIsLoading(false)
     }
   }, [classSubData]);
+
+  useEffect(() => {
+    if (selectedTab === 2) {
+      console.log(selectedCheckboxes)
+    }
+  }, [selectedCheckboxes]);
 
   useEffect(() => {
     if (selectedTab === 2 && tooltipContent === "Loading...") {
@@ -146,6 +174,12 @@ function CharacterPage() {
     if (selectedTab === 4) {
       setIsLoading(false)
     }
+  }, [spellData]);
+
+  useEffect(() => {
+    if (selectedTab === 4) {
+      setIsLoading(false)
+    }
   }, [charData]);
 
 
@@ -164,6 +198,22 @@ function CharacterPage() {
       })
       const jsonData = await response.json();
       setSkillData(jsonData["results"]);
+
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
+  async function getSpellAPI() {
+    try {
+      setIsLoading(true);
+      const response = await fetch('https://www.dnd5eapi.co/api/classes/'+charData.information.class.toLowerCase()+'/spells', {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      setSpellData(jsonData["results"]);
 
 
     } catch (error) {
@@ -250,7 +300,7 @@ function CharacterPage() {
     fontFamily: 'Josefin Sans',
     fontSize: '25px',
     fontWeight: 'bold',
-    paddingTop: '10px'
+    paddingTop: '15px'
   };
 
   const handleAmountChange = (event) => {
@@ -318,11 +368,44 @@ function CharacterPage() {
     }
   }
 
+
+  
+  async function updateCharacterSpell(charData) {
+    let mySpells = charData.spells;
+    if (!mySpells.includes(selectedSpell)) {
+      console.log(charData.proficiencies.includes(selectedSpell))
+      mySpells = [...charData.proficiencies, selectedSpell];
+
+      try {
+        const response = await fetch('http://localhost:8000/api/character/' + charData._id, {
+          method: "PUT",
+          headers: {
+            'auth': Cookies.get("Token"),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+              "spells": mySpells
+            }
+          ),
+
+        })
+        const jsonData = response;
+        charData.spells = [...charData.spells, selectedSpell];
+
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+  }
+
   async function updateCharacterSkill(charData) {
-    let mySkills = charData.spells;
-    if (!mySkills.includes(selectedSkill)) {
-      console.log(charData.spells.includes(selectedSkill))
-      mySkills = [...charData.spells, selectedSkill];
+    let myProfs = charData.proficiencies;
+    if (!myProfs.includes("Skill: " + selectedSkill)) {
+      console.log(charData.proficiencies.includes("Skill: " + selectedSkill))
+      myProfs = [...charData.proficiencies, "Skill: " + selectedSkill];
 
       try {
         const response = await fetch('http://localhost:8000/api/character/' + charData._id + "", {
@@ -334,13 +417,13 @@ function CharacterPage() {
           },
           body: JSON.stringify(
             {
-              "spells": mySkills
+              "proficiencies": myProfs
             }
           ),
 
         })
         const jsonData = response;
-        charData.spells = [...charData.spells, selectedSkill];
+        charData.proficiencies = [...charData.proficiencies, "Skill: " + selectedSkill];
 
 
       } catch (error) {
@@ -427,6 +510,22 @@ function CharacterPage() {
     }
   }
 
+  async function getSpellTooltipInfoAPI(apiURL) {
+    try {
+      const response = await fetch('https://www.dnd5eapi.co/api/spells/' + apiURL.replaceAll('(', '').replaceAll(':', '').replaceAll(' ', '-').replaceAll(')', '').replaceAll(',', '').replaceAll('\'', '').toLowerCase(), {
+        method: "GET"
+      })
+      const jsonData = await response.json();
+      if (Object.keys(jsonData.desc).length === 0) {
+        setSpellTooltipContent("This spell has no description.")
+      } else {
+        setSpellTooltipContent(jsonData.desc)
+      }
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
 
 
 
@@ -461,6 +560,14 @@ function CharacterPage() {
 
   };
 
+  const getSpellTooltip = (apiURL) => {
+    setTooltipContent("Loading...")
+    setTimeout(() => {
+      getSpellTooltipInfoAPI(apiURL.target.outerText);
+    }, 225);
+
+  };
+
   const getSkillTooltip = (apiURL) => {
     setSkillTooltipContent("Loading...")
     setTimeout(() => {
@@ -480,13 +587,15 @@ function CharacterPage() {
       getClassInfoAPI();
     } else if (newValue === 4) {
       getSkillAPI();
+      getSpellAPI();
     }
 
   };
 
 
 
-  const handleChange = (event, sel_class) => {
+  const handleChange = (event, sel_class, itemLabel) => {
+
     const checkboxValue = event.target.value;
     const isChecked = event.target.checked;
     let proficiencyCap = 2;
@@ -497,14 +606,21 @@ function CharacterPage() {
     }
 
     if (isChecked) {
-      if (selectedCheckboxes.length < proficiencyCap) {
-        setSelectedCheckboxes([...selectedCheckboxes, checkboxValue]);
+      if (Object.keys(selectedCheckboxes).length < proficiencyCap) {
+        setSelectedCheckboxes(prevSelected => ({
+          ...prevSelected,
+          [checkboxValue]: itemLabel,
+        }));
       }
     } else {
-      setSelectedCheckboxes(selectedCheckboxes.filter(item => item !== checkboxValue));
+      setSelectedCheckboxes(prevSelected => {
+        const updatedSelected = { ...prevSelected };
+        delete updatedSelected[checkboxValue];
+        return updatedSelected;
+      });
     }
-  };
 
+  };
 
 
 
@@ -870,51 +986,54 @@ function CharacterPage() {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={selectedClass}
-                        label="A minha classe"
-                        onChange={handleClassChange}
+                        value={charData.information.class}
+                        label={charData.information.class}
+                        disabled
+                      //onChange={handleClassChange}
                       >
                         {classData.map((item, index) => (
                           <MenuItem key={index} value={item.name}>{item.name}</MenuItem>
                         ))}
                       </Select>
+                      <FormHelperText>Não pode alterar a sua classe.</FormHelperText>
                     </FormControl>
                   </Box>
-
-                  {selectedClass !== "" && <>
-                    <p style={{ paddingTop: 10 }}>{classSubData.proficiency_choices[0].desc}</p>
-                    <p>{classSubData.name} </p><img src={classImages[classSubData.name]} style={{ maxWidth: '100%', maxHeight: '100%' }} alt={classSubData.name} />
+                  <p>{classSubData.name} </p><img src={classImages[classSubData.name]} style={{ maxWidth: '100%', maxHeight: '100%' }} alt={classSubData.name} />
 
 
 
-                    <FormGroup style={{ display: 'flex', flexDirection: "row" }}>
-                      {classSubData.proficiency_choices[0].from.options.map((item, index) => (
+                  <FormGroup style={{ display: 'flex', flexDirection: "row" }}>
+                    {classSubData.proficiency_choices[0].from.options.map((item, index) => (
 
-                        <Grid item key={index}>
-                          <Tooltip title={tooltipContent} arrow onMouseEnter={getProficiencyTooltip}>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  value={`checkbox${index}`}
-                                  onChange={(event) => handleChange(event, classSubData.name)}
-                                  checked={selectedCheckboxes.includes(`checkbox${index}`)}
-                                />
-                              }
-                              label={item.item.name}
-                            />
-                          </Tooltip>
-                        </Grid>
-                      ))}
-                    </FormGroup>
-                    <p style={{ paddingTop: 10 }}>This class starts with:</p>
-                    <Box sx={{ display: "flex", justifyContent: "center" }}>
-                      {classSubData.proficiencies.map((item, index) => (
-                        <p style={{ paddingTop: 10, fontSize: 15 }}>{item.name}  |  </p>
-                      ))}
-                    </Box>
-                  </>
-                  }
-
+                      <Grid item key={index}>
+                        <Tooltip title={tooltipContent} arrow onMouseEnter={getProficiencyTooltip}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                value={`checkbox${index}`}
+                                onChange={(event) => handleChange(event, classSubData.name)}
+                                checked={selectedCheckboxes.includes(item.item.name)}
+                                disabled
+                              />
+                            }
+                            label={item.item.name}
+                          />
+                        </Tooltip>
+                      </Grid>
+                    ))}
+                  </FormGroup>
+                  <p >Esta classe começa com as seguintes proficiencies:</p>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    {classSubData.proficiencies.map((item, index) => (
+                      <><p style={{ paddingTop: 2, fontSize: 18 }}>{item.name}  </p><p style={{ paddingTop: 2, fontSize: 18 }}> |  </p></>
+                    ))}
+                  </Box>
+                  <p >Esta classe começa com o equipmento seguinte:</p>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    {classSubData.starting_equipment.map((item, index) => (
+                      <><p style={{ paddingTop: 2, fontSize: 18 }}>{item.equipment.name}  </p><p style={{ paddingTop: 2, fontSize: 18 }}> |  </p></>
+                    ))}
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
@@ -932,22 +1051,20 @@ function CharacterPage() {
                 />
                 <CardContent style={{ width: 892, justifyContent: "flex-start", justifyContent: "flex-start", alignItems: "stretch", flexDirection: "column", alignContent: "center", flexWrap: "wrap" }}>
                   <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
-                    Habilidades
+                    Proficiencies
                   </Typography>
                   <Box sx={{ minWidth: 120, display: "flex", flexDirection: "row", flexWrap: "wrap", alignContent: "center", justifyContent: "center", alignItems: "center" }}>
-                    {charData.spells.map((item, index) => (
+                    {charData.proficiencies.map((item, index) => (
                       <Grid item key={index}>
-                        <Tooltip title={skillTooltipContent} arrow onMouseEnter={getSkillTooltip}>
-                          <p style={{ fontSize: 18, paddingRight: 25 }}>{item}</p>
-                        </Tooltip>
+                        <p style={{ fontSize: 18, paddingRight: 25 }}>{item}</p>
                       </Grid>
                     ))}
                   </Box>
                   <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
-                    Adicionar Habilidade
+                    Adicionar Proficiency
                   </Typography>
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Escolha uma habilidade para adicionar</InputLabel>
+                    <InputLabel id="demo-simple-select-label">Escolha uma proficiency para adicionar</InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
@@ -966,21 +1083,56 @@ function CharacterPage() {
                       type="submit"
                       onClick={() => updateCharacterSkill(charData)}
                       variant="contained"
-                      sx={{ mt: 3, mb: 2 }}
+                      sx={{ mt: 3, mb: 2}}
                     >
-                      Adicionar Habilidade à Personagem
+                      Adicionar Proficiency à Personagem
                     </Button></>
                   }
 
+                  <Typography gutterBottom variant="h5"  component="div" style={typographyStyleBold}></Typography>
+                  <Typography gutterBottom variant="h5"  component="div" style={typographyStyleBold}>
+                    Spells
+                  </Typography>
                   <Box sx={{ minWidth: 120, display: "flex", flexDirection: "row", flexWrap: "wrap", alignContent: "center", justifyContent: "center", alignItems: "center" }}>
                     {charData.spells.map((item, index) => (
-                      <Grid item key={index}>
-                        <Tooltip title={skillTooltipContent} arrow onMouseEnter={getSkillTooltip}>
-                          <p style={{ fontSize: 18, paddingRight: 25 }}>{item}</p>
+                      <Grid item key={index}> 
+                        <Tooltip title={spellTooltipContent} arrow onMouseEnter={getSpellTooltip}>
+                        <p style={{ fontSize: 18, paddingRight: 25 }}>{item}</p>
                         </Tooltip>
                       </Grid>
                     ))}
                   </Box>
+                  <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
+                    Adicionar Spells
+                  </Typography>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Escolha uma habilidade para adicionar</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={selectedSpell}
+                      label="Escolha um equipamento para adicionar"
+                      onChange={handleSpellAdd}
+                    >
+                      {spellData.map((item, index) => (
+                        <MenuItem key={index} value={item.name}>{item.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <p style={{ fontSize: 18, paddingRight: 25 }}>A mostrar apenas Spells da classe {charData.information.class}</p>
+                  {selectedSpell !== "" &&
+                    <><Button
+                      type="submit"
+                      onClick={() => updateCharacterSpell(charData)}
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                    >
+                      Adicionar Spell à Personagem
+                    </Button></>
+                  }
+
+
 
 
 

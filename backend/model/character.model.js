@@ -30,6 +30,9 @@ const CharacterSchema = new Schema({
         type: Map,
         required: [true, "Character must have coreskills"]
     },
+    equipment:{
+        type: Array
+    },
     information:{
         type: Map,
         required: [true, "Character must have information"]
@@ -41,6 +44,9 @@ const CharacterSchema = new Schema({
         type: Array
     },
     weaknesses:{
+        type: Array
+    },
+    proficiencies:{
         type: Array
     },
     resistances:{
