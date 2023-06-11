@@ -22,9 +22,10 @@ import DefaultPage from './pages/dashboard/DefaultPage.tsx';
 import Perfil from './pages/dashboard/perfil/Perfil.tsx';
 import NewCharacterPage from './pages/dashboard/character/edit/MyCharacterPage.tsx';
 import NewCampaignPage from './pages/dashboard/campaigns/MyCampaignPage.tsx';
-import Pricing from './pages/dashboard/pricing/Pricing.js';
+import Pricing from './pages/dashboard/pricing/Pricing.tsx';
 import EditCharacterPage from './pages/dashboard/character/edit/EditCharacterPage.tsx';
 import CreateNewCharacterPage from './pages/dashboard/character/add/NewCharacterPage.tsx';
+import CreateNewCampaignPage from './pages/dashboard/campaigns/NewCampaignPage.tsx';
 
 
 
@@ -37,7 +38,7 @@ function App() {
         <Route path="/dashboard/myCharacters" element={<NewCharacterPage />} />
 
         <Route path="/dashboard/newCharacter" element={<CreateNewCharacterPage />} />
-
+        <Route path="/dashboard/newCampaign" element={<CreateNewCampaignPage />} />
         <Route path="/dashboard/MyCampaigns" element={<NewCampaignPage />} />
         <Route path="/dashboard/payments" element={<Pricing />} />
         <Route path="/dashboard/myCharacters/:id" element={<EditCharacterPage />} />

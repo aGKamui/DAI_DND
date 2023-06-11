@@ -9,6 +9,7 @@ const characterRoutes = require("./route/character.route");
 const purchaseRoutes = require("./route/purchase.route");
 const campaignRoutes = require("./route/campaign.route");
 const sceneRoutes = require("./route/scene.route");
+const chatRoutes = require("./route/chat.route");
 
 
 
@@ -35,13 +36,15 @@ app.use("/api/user", userRoutes);
 
 app.use("/api/dice", diceRoutes);
 
-app.use("/api/character", characterRoutes); 
+app.use("/api/character", characterRoutes);
 
 app.use("/api/purchase", purchaseRoutes);
 
 app.use("/api/campaign", campaignRoutes);
 
 app.use("/api/scene", sceneRoutes);
+
+app.use("/api/chat", chatRoutes);
 
 app.get("/random", (req, res) => {
   res.status = 418;

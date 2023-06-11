@@ -116,7 +116,7 @@ function CreateNewCharacterPage() {
     }
   }, [tooltipContent]);
 
-  
+
   async function getSkillAPI() {
     try {
       setIsLoading(true);
@@ -288,10 +288,10 @@ function CreateNewCharacterPage() {
     }
   }
 
-  async function updateCharacterInfo(charData) {
+  async function createCharacter() {
     try {
-      const response = await fetch('http://localhost:8000/api/character/' + charData._id + "", {
-        method: "PUT",
+      const response = await fetch('http://localhost:8000/api/character/', {
+        method: "POST",
         headers: {
           'auth': Cookies.get("Token"),
           'Accept': 'application/json',
@@ -299,16 +299,6 @@ function CreateNewCharacterPage() {
         },
         body: JSON.stringify(
           {
-            "abilityscores": {
-              "str": str,
-              "dex": dex,
-              "con": con,
-              "int": int,
-              "wis": wis,
-              "cha": cha
-            },
-            "hitpoints": [charData.hitpoints[0], charData.hitpoints[1]],
-            "information": charData.information
           }
         ),
 
@@ -414,7 +404,8 @@ function CreateNewCharacterPage() {
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
     if (newValue === 1) {
-      getClassInfoAPI();}
+      getClassInfoAPI();
+    }
 
   };
 
@@ -479,6 +470,7 @@ function CreateNewCharacterPage() {
                   <TextField
                     id="information/name"
                     variant="outlined"
+                    defaultValue={"O meu nome"}
                     onChange={(event) => { updateName(event.target.value) }}
                   />
                   <Typography gutterBottom variant="h5" component="div" style={typographyStyleBold}>
@@ -488,6 +480,7 @@ function CreateNewCharacterPage() {
                     multiline
                     fullWidth
                     rows={4}
+                    defaultValue={"A minha Bio."}
                     onChange={(event) => { updateBio(event.target.value) }}
                     variant="filled"
                   />
@@ -505,6 +498,7 @@ function CreateNewCharacterPage() {
                       />
                       <div style={{ alignItems: 'center' }}>
                         <TextField
+                          defaultValue={0}
                           type="number"
                           id="information/name"
                           variant="outlined"
@@ -524,6 +518,7 @@ function CreateNewCharacterPage() {
                       />
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
+                          defaultValue={0}
                           type="number"
                           id="information/name"
                           variant="outlined"
@@ -543,6 +538,7 @@ function CreateNewCharacterPage() {
                       />
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
+                          defaultValue={0}
                           type="number"
                           id="information/name"
                           variant="outlined"
@@ -562,6 +558,7 @@ function CreateNewCharacterPage() {
                       />
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
+                          defaultValue={0}
                           type="number"
                           id="information/name"
                           variant="outlined"
@@ -581,6 +578,7 @@ function CreateNewCharacterPage() {
                       />
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
+                          defaultValue={0}
                           type="number"
                           id="information/name"
                           variant="outlined"
@@ -600,6 +598,7 @@ function CreateNewCharacterPage() {
                       />
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
+                          defaultValue={0}
                           type="number"
                           id="information/name"
                           variant="outlined"
@@ -660,21 +659,12 @@ function CreateNewCharacterPage() {
 
 
                 </Grid>
-
-                <Button
-                  type="submit"
-                  onClick={() => updateCharacterInfo(charData)}
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Atualizar Informações da Personagem
-                </Button>
               </Card>
             </Grid>
 
           </Grid>
         }
-        
+
         {selectedTab === 1 &&
           <Grid container spacing={2} padding={2} paddingTop={2} alignItems="center" justifyContent="center">
             <Grid item>
@@ -744,9 +734,16 @@ function CreateNewCharacterPage() {
             </Grid>
           </Grid>
         }
-        
 
 
+        <Button
+          type="submit"
+          onClick={() => createCharacter()}
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Criar Personagem
+        </Button>
 
 
 
