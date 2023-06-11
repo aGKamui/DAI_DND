@@ -15,9 +15,7 @@ class UserRepository {
   }
 
   async addCampaign(username, campaign){
-    console.log(username);
     let user = await User.findOne({username: username});
-    console.log(user);
     user.campaigns.push(campaign);
     await User.updateOne({username: username}, user);
     return user;

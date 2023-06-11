@@ -42,7 +42,7 @@ router.put("/:id", async (req, res) => {
         return res.status(404).send("Information not found.")
     }
     if(campaign === 403){
-        return res.status(401).send("Not enough permissions.")
+        return res.status(403).send("Not enough permissions.")
     }
     if(campaign === 400){
         return res.status(400).send("Invalid changes.")
@@ -63,7 +63,14 @@ router.delete("/:id", async(req, res) => {
     if(AuthedUser === 401){
         return res.status(401).send("Invalid Token.");
     }
-    return res.json(await campaignController.deleteCampaign(req.params.id, AuthedUser.username))
+    const campaign = await campaignController.deleteCampaign(req.params.id, AuthedUser.username);
+    if(campaign === 404){
+        return res.status(404).send("Campaign Not Found");
+    }
+    if(campaign === 403){
+        return res.status(403).send("Not the owner of this campaign");
+    }
+    return res.status(200).json(campaign);
 })
 
 router.put("/:id/image", upload.single('image'), async (req, res) => {
@@ -76,4 +83,39 @@ router.put("/:id/image", upload.single('image'), async (req, res) => {
     res.json(campaign);
 });
 
+router.put("/:id/character", async(req, res) => {
+    AuthedUser = await authService.verifyToken(req.headers.auth);
+    if(AuthedUser === 401){
+        return res.status(401).send("Invalid Token.");
+    }
+    const campaign = await campaignController.addCharacter(req.params.id, req.body, AuthedUser.username)
+    if(campaign === 404){
+        return res.status(404).send("Campaign not found.")
+    }
+    if(campaign === 403){
+        return res.status(403).send("Not enough permissions.")
+    }
+    if(campaign === 400){
+        return res.status(400).send("Invalid JSON.")
+    }
+    return res.status(200).json(campaign);
+})
+
+router.delete("/:id/character", async (req, res) => {
+    AuthedUser = await authService.verifyToken(req.headers.auth);
+    if(AuthedUser === 401){
+        return res.status(401).send("Invalid Token.");
+    }
+    const campaign = await campaignController.deleteCharacter(req.params.id, req.body, AuthedUser.username)
+    if(campaign === 400){
+        return res.status(400).send("Invalid JSON.")
+    }
+    if(campaign === 403){
+        return res.status(403).send("Not enough permissions.")
+    }
+    if(campaign === 404){
+        return res.status(404).send("Resource Not Found.")
+    }
+    return res.status(200).json(campaign)
+})
 module.exports = router;

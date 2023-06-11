@@ -4,6 +4,7 @@ const userRepository = require("../repository/user.repository");
 const characterRepository = require("../repository/character.repository");
 const chatRepository = require("../repository/chat.repository");
 const chatData = require("../model/chatData.model");
+const character = require("../model/character.model");
 
 class CampaignService{
     async createCampaign(campaignInfo, username){
@@ -184,6 +185,41 @@ class CampaignService{
             return campaign;
         }
         return 403;
+    }
+
+    async addCharacter(campaignId, character, username){
+        const user = await userRepository.getUser(username);
+        const campaign = await campaignRepository.getCampaign(campaignId);
+        const { characterId } = character
+        if(!(characterId)){
+            return 400
+        }
+        if(!(campaign)){
+            return 404
+        }
+        if(user.characters.includes(characterId)){
+            if(this.isCharacterInAnotherCampaign(await this.getCampaignIdsByCharacterList([characterId]),campaignId)){
+                await this.deleteCharacter(campaignId, characterId, username)
+            }
+            return await campaignRepository.addCharacter(campaignId, characterId)
+        }
+        return 403
+    }
+
+    async deleteCharacter(campaignId, character, username){
+        const user = await userRepository.getUser(username);
+        const campaign = await campaignRepository.getCampaign(campaignId);
+        const { characterId } = character
+        if(!(characterId)){
+            return 400
+        }
+        if(!(campaign) || !(campaign.characters.includes(characterId))){
+            return 404
+        }
+        if(user.characters.includes(characterId) || user.campaigns.includes(campaignId)){
+            return await campaignRepository.deleteCharacter(campaignId, characterId)
+        }
+        return 403
     }
 }
 
